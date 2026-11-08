@@ -1,0 +1,19 @@
+[
+  {
+    "id": "primeros-pasos",
+    "title": "Primeros pasos con Python",
+    "description": "Aprende las bases del lenguaje.",
+    "courseIds": [
+      "python-fundamentos",
+      "python-practica"
+    ]
+  },
+  {
+    "id": "automatizacion",
+    "title": "Camino a la automatización",
+    "description": "Empieza con fundamentos compartidos.",
+    "courseIds": [
+      "python-fundamentos"
+    ]
+  }
+]

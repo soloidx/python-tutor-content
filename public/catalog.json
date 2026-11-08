@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "revision": "972cc2705d9944224326b61c1d4fe883732e53157b9e34069ebf4ac91b4157d7",
+  "learningPaths": [
+    {
+      "id": "primeros-pasos",
+      "title": "Primeros pasos con Python",
+      "description": "Aprende las bases del lenguaje.",
+      "courseIds": [
+        "python-fundamentos",
+        "python-practica"
+      ]
+    },
+    {
+      "id": "automatizacion",
+      "title": "Camino a la automatización",
+      "description": "Empieza con fundamentos compartidos.",
+      "courseIds": [
+        "python-fundamentos"
+      ]
+    }
+  ],
+  "courses": [
+    {
+      "id": "python-fundamentos",
+      "file": "courses/python-fundamentos.3da7931517a14cf4c82e7f7c8057083476fc7430caa393fd2c8911b69a7f2438.json",
+      "sha256": "3da7931517a14cf4c82e7f7c8057083476fc7430caa393fd2c8911b69a7f2438"
+    },
+    {
+      "id": "python-practica",
+      "file": "courses/python-practica.995838976f81da94bee4d500a295b73811a4fc3426877d0a65480767cee0386f.json",
+      "sha256": "995838976f81da94bee4d500a295b73811a4fc3426877d0a65480767cee0386f"
+    }
+  ]
+}
