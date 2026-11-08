@@ -25,4 +25,4 @@ El contrato se conserva en `docs/contract.md`; el validador en `scripts/content-
 
 ## GitHub Pages y dominio
 
-La aplicación espera `https://soloidx.github.io/python-tutor-content/catalog.json`. Esta fuente usa el dominio predeterminado de Pages y no incluye CNAME. El dominio del sitio principal puede conservarse. Si GitHub redirige esta URL a un dominio heredado de un sitio de usuario, comprueba la URL efectiva y CORS: el consumidor rechaza redirecciones de archivos. No cambies DNS ni el dominio del sitio principal para esta fuente sin verificarlo.
+La URL pública es `https://www.ider.ninja/python-tutor-content/catalog.json`. Pages hereda el dominio del sitio de usuario y tiene HTTPS obligatorio. La aplicación usa esta URL canónica porque rechaza redirecciones. La URL `soloidx.github.io` redirige al dominio heredado; no requiere cambios de DNS ni CNAME en este repositorio. Se verificó `Access-Control-Allow-Origin: *` en la publicación inicial.
