@@ -17,6 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: npm ci
       - run: npm run build && npm run check
       - name: Require generated publication in commit
         run: git diff --exit-code -- public && test -z "$(git ls-files --others --exclude-standard public)"

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": "972cc2705d9944224326b61c1d4fe883732e53157b9e34069ebf4ac91b4157d7",
+  "revision": "0646ba6e67ed52c44225a8e0031ef8063ac8f2a1d1616cea50cc5c0b32c61ab5",
   "learningPaths": [
     {
       "id": "primeros-pasos",
@@ -9,7 +9,11 @@
       "courseIds": [
         "python-fundamentos",
         "python-practica"
-      ]
+      ],
+      "icon": {
+        "file": "icons/path.5a73942e182c07505d966a8c138afefec101a6993dfc14c29b7d8f7960aa570c.svg",
+        "sha256": "5a73942e182c07505d966a8c138afefec101a6993dfc14c29b7d8f7960aa570c"
+      }
     },
     {
       "id": "automatizacion",
@@ -17,19 +21,23 @@
       "description": "Empieza con fundamentos compartidos.",
       "courseIds": [
         "python-fundamentos"
-      ]
+      ],
+      "icon": {
+        "file": "icons/path.5a73942e182c07505d966a8c138afefec101a6993dfc14c29b7d8f7960aa570c.svg",
+        "sha256": "5a73942e182c07505d966a8c138afefec101a6993dfc14c29b7d8f7960aa570c"
+      }
     }
   ],
   "courses": [
     {
       "id": "python-fundamentos",
-      "file": "courses/python-fundamentos.3da7931517a14cf4c82e7f7c8057083476fc7430caa393fd2c8911b69a7f2438.json",
-      "sha256": "3da7931517a14cf4c82e7f7c8057083476fc7430caa393fd2c8911b69a7f2438"
+      "file": "courses/python-fundamentos.4a487eaaff468080ae7b148058295ef6fe9dedac2623d6fe0f8c1d90c392ed33.json",
+      "sha256": "4a487eaaff468080ae7b148058295ef6fe9dedac2623d6fe0f8c1d90c392ed33"
     },
     {
       "id": "python-practica",
-      "file": "courses/python-practica.995838976f81da94bee4d500a295b73811a4fc3426877d0a65480767cee0386f.json",
-      "sha256": "995838976f81da94bee4d500a295b73811a4fc3426877d0a65480767cee0386f"
+      "file": "courses/python-practica.036ca065c044d70d68589ffb0208352d9836268f708dea5d85034bc0082205e0.json",
+      "sha256": "036ca065c044d70d68589ffb0208352d9836268f708dea5d85034bc0082205e0"
     }
   ]
 }

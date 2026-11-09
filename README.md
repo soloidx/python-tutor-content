@@ -4,7 +4,7 @@ Catálogo de prueba para Python Tutor, publicado como JSON estático en GitHub P
 
 ## Editar y publicar
 
-Requiere Node.js 22. No necesita dependencias npm.
+Requiere Node.js 22. Ejecuta `npm ci` para instalar el validador XML del subconjunto SVG.
 
 1. Edita los cursos en `content/courses/` y las rutas en `content/learning-paths.json`.
 2. Ejecuta `npm run build` y `npm run check`.
@@ -26,3 +26,7 @@ El contrato se conserva en `docs/contract.md`; el validador en `scripts/content-
 ## GitHub Pages y dominio
 
 La URL pública es `https://www.ider.ninja/python-tutor-content/catalog.json`. Pages hereda el dominio del sitio de usuario y tiene HTTPS obligatorio. La aplicación usa esta URL canónica porque rechaza redirecciones. La URL `soloidx.github.io` redirige al dominio heredado; no requiere cambios de DNS ni CNAME en este repositorio. Se verificó `Access-Control-Allow-Origin: *` en la publicación inicial.
+
+## Iconos por recurso
+
+Guarda los SVG originales en `content/icons/` y añade `"icon": "icons/<slug>.svg"` a una ruta, curso o tema en `content/`. Es opcional: sin el campo, la app muestra un icono predeterminado. `npm run build` genera los archivos inmutables en `public/icons/` y sus referencias con SHA-256; `npm run check` verifica publicación, integridad y el subconjunto SVG estático. No se permiten scripts, eventos, CSS, animaciones ni referencias externas. El contrato completo está en `docs/contract.md` y la skill `$generate-python-content` incluye estas reglas. Los iconos se conservan en el respaldo local del tutor junto con el contenido.

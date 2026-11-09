@@ -1,11 +1,28 @@
 import {readFile,writeFile,readdir,mkdir,access} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {validateSvgIcon} from "./svgIcon.js";
 import {validateCatalog,validateCourse} from './content-contract.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
+await mkdir('public/icons',{recursive:true});
+async function publishIcon(item) {
+  if (item.icon === undefined) return;
+  if (typeof item.icon !== 'string' || !/^icons\/[a-z0-9]+(?:-[a-z0-9]+)*\.svg$/.test(item.icon)) throw new Error('Source icon must be icons/<slug>.svg');
+  const source=await readFile(`content/${item.icon}`,'utf8');
+  validateSvgIcon(source);
+  const sha256=hash(source);
+  const file=item.icon.replace('.svg', `.${sha256}.svg`);
+  let existing; try {existing=await readFile(`public/${file}`,'utf8');} catch(e) {if(e.code!=='ENOENT')throw e;}
+  if(existing!==undefined && existing!==source)throw new Error(`Immutable icon changed: ${file}`);
+  await writeFile(`public/${file}`,source);
+  item.icon={file,sha256};
+}
 const learningPaths = JSON.parse(await readFile('content/learning-paths.json','utf8'));
+for(const path of learningPaths)await publishIcon(path);
 const documents = [];
 for (const name of (await readdir('content/courses')).filter(n=>n.endsWith('.json')).sort()) {
   const course=JSON.parse(await readFile(`content/courses/${name}`,'utf8'));
+  await publishIcon(course);
+  for(const topic of course.topics || [])await publishIcon(topic);
   validateCourse(course,course.id);
   const bytes=JSON.stringify(course,null,2)+'\n';
   const sha256=hash(bytes);

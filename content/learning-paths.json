@@ -6,7 +6,8 @@
     "courseIds": [
       "python-fundamentos",
       "python-practica"
-    ]
+    ],
+    "icon": "icons/path.svg"
   },
   {
     "id": "automatizacion",
@@ -14,6 +15,7 @@
     "description": "Empieza con fundamentos compartidos.",
     "courseIds": [
       "python-fundamentos"
-    ]
+    ],
+    "icon": "icons/path.svg"
   }
 ]

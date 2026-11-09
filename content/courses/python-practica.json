@@ -43,7 +43,8 @@
           "success": "Actualizaste una variable y mostraste su nuevo valor.",
           "retry": "La variable edad debe guardar el número 21 y la salida debe mostrar 21."
         }
-      ]
+      ],
+      "icon": "icons/topic.svg"
     },
     {
       "id": "expresiones-salida",
@@ -84,7 +85,8 @@
           "success": "Combinaste un cálculo y un mensaje en la salida.",
           "retry": "puntos debe valer 15 y la salida debe ser exactamente Puntos: 15."
         }
-      ]
+      ],
+      "icon": "icons/topic.svg"
     },
     {
       "id": "condicionales",
@@ -125,7 +127,8 @@
           "success": "Usaste el resto de una división para elegir una alternativa.",
           "retry": "Con numero = 7 la salida debe ser exactamente Impar."
         }
-      ]
+      ],
+      "icon": "icons/topic.svg"
     },
     {
       "id": "bucles",
@@ -166,7 +169,8 @@
           "success": "Acumulaste valores y terminaste el bucle al cambiar su condición.",
           "retry": "Al terminar, total debe ser 10, numero debe ser 5 y la salida debe mostrar solo 10."
         }
-      ]
+      ],
+      "icon": "icons/topic.svg"
     },
     {
       "id": "funciones",
@@ -207,7 +211,8 @@
           "success": "Reutilizaste una función con un parámetro de texto.",
           "retry": "saludar debe devolver el saludo usando el nombre recibido. La salida debe ser Hola, Ada."
         }
-      ]
+      ],
+      "icon": "icons/topic.svg"
     },
     {
       "id": "listas-diccionarios",
@@ -248,7 +253,9 @@
           "success": "Consultaste y actualizaste los valores de un diccionario por sus claves.",
           "retry": "persona debe guardar nombre Ada y edad 21. La salida debe ser Ada 21."
         }
-      ]
+      ],
+      "icon": "icons/topic.svg"
     }
-  ]
+  ],
+  "icon": "icons/course.svg"
 }
