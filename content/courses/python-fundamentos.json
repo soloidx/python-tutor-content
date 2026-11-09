@@ -12,7 +12,7 @@
       "explanation": [
         "Un valor es un dato: un número como 20 o un texto como \"Ada\". Los textos se escriben entre comillas.",
         "Una variable es un nombre que guarda un valor. Usa el signo = para asignarlo. Después puedes usar ese nombre o darle un nuevo valor.",
-        "print() muestra un valor en la salida. Prueba el ejemplo y luego resuelve los dos ejercicios."
+        "print() muestra un valor en la salida. Prueba el ejemplo y luego resuelve los tres ejercicios."
       ],
       "example": "ciudad = \"Lima\"\nprint(ciudad)\n\naño = 2026\nprint(año)",
       "takeaway": "El signo = asigna un valor; no es una comparación. Python distingue mayúsculas y minúsculas: edad y Edad son nombres diferentes.",
@@ -117,6 +117,35 @@
           "check": "puntos == 15 and _output == \"Puntos: 15\"",
           "success": "Combinaste un cálculo y un mensaje en la salida.",
           "retry": "puntos debe valer 15 y la salida debe ser exactamente Puntos: 15."
+        },
+        {
+          "id": "orden-operaciones",
+          "type": "choice",
+          "title": "Leer una expresión",
+          "prompt": "¿Qué valor muestra print(2 + 3 * 4)?",
+          "code": "print(2 + 3 * 4)",
+          "hints": [
+            "Observa qué operación aparece antes de la suma.",
+            "Python calcula la multiplicación antes que la suma, salvo que haya paréntesis."
+          ],
+          "options": [
+            {
+              "id": "catorce",
+              "text": "14"
+            },
+            {
+              "id": "veinte",
+              "text": "20",
+              "retry": "Calcula primero 3 * 4 y después suma 2."
+            },
+            {
+              "id": "veintiocho",
+              "text": "28"
+            }
+          ],
+          "answerId": "catorce",
+          "retry": "Recuerda que la multiplicación se realiza antes que la suma.",
+          "explanation": "3 * 4 se calcula primero y da 12; después 2 + 12 da 14."
         }
       ],
       "icon": "icons/topic.svg"
@@ -161,6 +190,35 @@
           "check": "numero == 7 and _output == \"Impar\"",
           "success": "Usaste el resto de una división para elegir una alternativa.",
           "retry": "Con numero = 7 la salida debe ser exactamente Impar."
+        },
+        {
+          "id": "condicion-igualdad",
+          "type": "choice",
+          "title": "Leer una condición",
+          "prompt": "Con edad = 18, ¿qué mensaje muestra este código?",
+          "code": "edad = 18\nif edad >= 18:\n    print(\"Puede entrar\")\nelse:\n    print(\"Debe esperar\")",
+          "hints": [
+            "Compara 18 con el límite de la condición.",
+            "El operador >= también acepta valores iguales al límite."
+          ],
+          "options": [
+            {
+              "id": "puede-entrar",
+              "text": "Puede entrar"
+            },
+            {
+              "id": "debe-esperar",
+              "text": "Debe esperar",
+              "retry": "La condición usa >=, así que 18 sí cumple el límite."
+            },
+            {
+              "id": "ambos-mensajes",
+              "text": "Ambos mensajes"
+            }
+          ],
+          "answerId": "puede-entrar",
+          "retry": "Comprueba si 18 es mayor o igual que 18.",
+          "explanation": "18 >= 18 es verdadero, por eso se ejecuta el bloque del if y se muestra Puede entrar."
         }
       ],
       "icon": "icons/topic.svg"
@@ -205,6 +263,35 @@
           "check": "total == 10 and numero == 5 and _output == \"10\"",
           "success": "Acumulaste valores y terminaste el bucle al cambiar su condición.",
           "retry": "Al terminar, total debe ser 10, numero debe ser 5 y la salida debe mostrar solo 10."
+        },
+        {
+          "id": "rango-fin",
+          "type": "choice",
+          "title": "Leer un rango",
+          "prompt": "¿Qué valores recorre for numero in range(1, 4)?",
+          "code": "for numero in range(1, 4):\n    print(numero)",
+          "hints": [
+            "range() incluye el inicio, pero no su límite final.",
+            "El 4 indica dónde se detiene el recorrido; no aparece en la salida."
+          ],
+          "options": [
+            {
+              "id": "uno-dos-tres",
+              "text": "1, 2 y 3"
+            },
+            {
+              "id": "uno-dos-tres-cuatro",
+              "text": "1, 2, 3 y 4",
+              "retry": "El límite final de range() queda fuera del recorrido."
+            },
+            {
+              "id": "cero-uno-dos-tres",
+              "text": "0, 1, 2 y 3"
+            }
+          ],
+          "answerId": "uno-dos-tres",
+          "retry": "Recuerda que range(1, 4) comienza en 1 y excluye el 4.",
+          "explanation": "range(1, 4) produce 1, 2 y 3: incluye el inicio y excluye el límite final."
         }
       ],
       "icon": "icons/topic.svg"
@@ -249,6 +336,35 @@
           "check": "callable(saludar) and saludar(\"Ada\") == \"Hola, Ada\" and saludar(\"Luis\") == \"Hola, Luis\" and _output == \"Hola, Ada\"",
           "success": "Reutilizaste una función con un parámetro de texto.",
           "retry": "saludar debe devolver el saludo usando el nombre recibido. La salida debe ser Hola, Ada."
+        },
+        {
+          "id": "retorno-funcion",
+          "type": "choice",
+          "title": "Entender return",
+          "prompt": "¿Qué valor devuelve doble(4) en esta función?",
+          "code": "def doble(numero):\n    return numero * 2\n\nresultado = doble(4)",
+          "hints": [
+            "Sustituye numero por el argumento que recibe la función.",
+            "return entrega el resultado de multiplicar 4 por 2."
+          ],
+          "options": [
+            {
+              "id": "ocho",
+              "text": "8"
+            },
+            {
+              "id": "cuatro",
+              "text": "4",
+              "retry": "La función multiplica el argumento por 2 antes de devolverlo."
+            },
+            {
+              "id": "cero",
+              "text": "0"
+            }
+          ],
+          "answerId": "ocho",
+          "retry": "Calcula el valor de numero * 2 cuando numero vale 4.",
+          "explanation": "La función recibe 4 y devuelve 4 * 2, que es 8."
         }
       ],
       "icon": "icons/topic.svg"
@@ -293,6 +409,35 @@
           "check": "persona == {\"nombre\": \"Ada\", \"edad\": 21} and _output == \"Ada 21\"",
           "success": "Consultaste y actualizaste los valores de un diccionario por sus claves.",
           "retry": "persona debe guardar nombre Ada y edad 21. La salida debe ser Ada 21."
+        },
+        {
+          "id": "indice-lista",
+          "type": "choice",
+          "title": "Leer un índice",
+          "prompt": "Después de crear esta lista, ¿qué valor es frutas[1]?",
+          "code": "frutas = [\"manzana\", \"pera\", \"uva\"]",
+          "hints": [
+            "Las listas empiezan a contar sus posiciones desde 0.",
+            "La posición 0 es manzana, así que la posición 1 es el siguiente elemento."
+          ],
+          "options": [
+            {
+              "id": "pera",
+              "text": "pera"
+            },
+            {
+              "id": "manzana",
+              "text": "manzana",
+              "retry": "Recuerda que el primer elemento tiene índice 0."
+            },
+            {
+              "id": "uva",
+              "text": "uva"
+            }
+          ],
+          "answerId": "pera",
+          "retry": "Cuenta desde el índice 0 para encontrar el segundo elemento.",
+          "explanation": "frutas[0] es manzana y frutas[1] es pera porque las listas usan índices que comienzan en 0."
         }
       ],
       "icon": "icons/topic.svg"
