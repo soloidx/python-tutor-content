@@ -38,6 +38,11 @@ function unique(values, at) {
 function fields(value, names, at) {
   names.forEach((name) => text(value[name], `${at}.${name}`));
 }
+function absent(value, names, at) {
+  names.forEach((name) =>
+    requireValue(!Object.hasOwn(value, name), `${at}.${name} no es válido aquí`),
+  );
+}
 function version(value, at) {
   object(value, at);
   requireValue(value.schemaVersion === 1, `${at}: schemaVersion desconocida`);
@@ -67,6 +72,13 @@ function validateIcon(icon) {
   courseFileUrl(icon.file);
   requireValue(icon.file.endsWith(".svg"), "icon.file debe terminar en .svg");
   requireValue(typeof icon.sha256 === "string" && /^[a-f0-9]{64}$/.test(icon.sha256), "icon.sha256 incorrecto");
+}
+function validateSourceIcon(icon) {
+  if (icon === undefined) return;
+  requireValue(
+    typeof icon === "string" && /^icons\/[a-z0-9]+(?:-[a-z0-9]+)*\.svg$/.test(icon),
+    "icon debe ser icons/<slug>.svg en la fuente",
+  );
 }
 export function publicationIcons(catalog, courses) {
   const icons = [...catalog.learningPaths, ...Object.values(courses).flatMap(course => [course, ...course.topics])].flatMap(item => item.icon ? [item.icon] : []);
@@ -131,10 +143,51 @@ export function validateCatalog(catalog) {
   );
   return catalog;
 }
-export function validateCourse(course, expectedId) {
+function validateExercise(exercise, at, source) {
+  object(exercise, at);
+  slug(exercise.id, `${at}.id`);
+  fields(exercise, ["title", "prompt"], at);
+  list(exercise.hints, `${at}.hints`, false);
+  exercise.hints.forEach((hint) => text(hint, `${at}.hints`));
+  if (source)
+    requireValue(
+      exercise.type === "code" || exercise.type === "choice",
+      `${at}.type debe ser code o choice en la fuente`,
+    );
+  const type = exercise.type === undefined ? "code" : exercise.type;
+  requireValue(type === "code" || type === "choice", `${at}.type desconocido`);
+  if (type === "code") {
+    absent(exercise, ["code", "options", "answerId", "explanation"], at);
+    fields(exercise, ["check", "success", "retry"], at);
+    requireValue(typeof exercise.starter === "string", `${at}.starter debe ser texto`);
+  } else {
+    absent(exercise, ["starter", "check", "success"], at);
+    fields(exercise, ["retry", "explanation"], at);
+    if (Object.hasOwn(exercise, "code")) text(exercise.code, `${at}.code`);
+    list(exercise.options, `${at}.options`);
+    requireValue(exercise.options.length >= 2, `${at}.options necesita al menos dos opciones`);
+    for (const option of exercise.options) {
+      object(option, `${at}.option`);
+      slug(option.id, `${at}.option.id`);
+      text(option.text, `${at}.option.text`);
+      if (Object.hasOwn(option, "retry")) text(option.retry, `${at}.option.retry`);
+    }
+    unique(exercise.options.map((option) => option.id), `${at}.options`);
+    slug(exercise.answerId, `${at}.answerId`);
+    requireValue(
+      exercise.options.some((option) => option.id === exercise.answerId),
+      `${at}.answerId no existe en las opciones`,
+    );
+    const correct = exercise.options.find((option) => option.id === exercise.answerId);
+    requireValue(!Object.hasOwn(correct, "retry"), `${at}.option.correcta no puede tener retry`);
+  }
+  return exercise;
+}
+
+function validateCourseWithMode(course, expectedId, source) {
   version(course, "course");
   slug(course.id, "course.id");
-  validateIcon(course.icon);
+  (source ? validateSourceIcon : validateIcon)(course.icon);
   requireValue(
     course.id === expectedId,
     "ID del documento de curso no coincide con el registro",
@@ -145,7 +198,7 @@ export function validateCourse(course, expectedId) {
   for (const topic of course.topics) {
     object(topic, "topic");
     slug(topic.id, "topic.id");
-    validateIcon(topic.icon);
+    (source ? validateSourceIcon : validateIcon)(topic.icon);
     fields(topic, ["title", "summary", "example", "takeaway"], "topic");
     if (topic.duration !== undefined) text(topic.duration, "topic.duration");
     list(topic.explanation, "topic.explanation");
@@ -154,19 +207,7 @@ export function validateCourse(course, expectedId) {
     );
     list(topic.exercises, "topic.exercises");
     for (const exercise of topic.exercises) {
-      object(exercise, "exercise");
-      slug(exercise.id, "exercise.id");
-      fields(
-        exercise,
-        ["title", "prompt", "check", "success", "retry"],
-        "exercise",
-      );
-      requireValue(
-        typeof exercise.starter === "string",
-        "exercise.starter debe ser texto",
-      );
-      list(exercise.hints, "exercise.hints", false);
-      exercise.hints.forEach((hint) => text(hint, "exercise.hints"));
+      validateExercise(exercise, "exercise", source);
       exercises.push(exercise.id);
     }
   }
@@ -209,6 +250,37 @@ export function validateCourse(course, expectedId) {
     );
   }
   return course;
+}
+
+export function validateCourse(course, expectedId) {
+  return validateCourseWithMode(course, expectedId, false);
+}
+
+export function validateSourceCourse(course, expectedId) {
+  return validateCourseWithMode(course, expectedId, true);
+}
+
+export function validateSourceLearningPaths(paths, courseIds) {
+  list(paths, "learningPaths");
+  const ids = new Set(courseIds);
+  for (const path of paths) {
+    object(path, "learningPath");
+    slug(path.id, "learningPath.id");
+    validateSourceIcon(path.icon);
+    fields(path, ["title", "description"], "learningPath");
+    list(path.courseIds, "learningPath.courseIds");
+    unique(path.courseIds, "learningPath.courseIds");
+    for (const id of path.courseIds) {
+      slug(id, "learningPath.courseIds");
+      requireValue(ids.has(id), `referencia de curso inexistente ${id}`);
+    }
+  }
+  unique(paths.map((path) => path.id), "learningPaths");
+  requireValue(
+    [...ids].every((id) => paths.some((path) => path.courseIds.includes(id))),
+    "todo curso debe pertenecer a una ruta",
+  );
+  return paths;
 }
 export function validatePublication(publication) {
   object(publication, "publication");

@@ -19,6 +19,7 @@
       "exercises": [
         {
           "id": "saludo",
+          "type": "code",
           "title": "Tu primera variable",
           "prompt": "Crea una variable llamada nombre con el texto \"Ada\". Muestra Hola, Ada usando esa variable.",
           "starter": "# Guarda un nombre y úsalo en el saludo\nnombre = \"\"\nprint(\"Hola, \" + nombre)",
@@ -31,7 +32,37 @@
           "retry": "Revisa que nombre guarde \"Ada\" y que la salida sea exactamente Hola, Ada."
         },
         {
+          "id": "asignacion",
+          "type": "choice",
+          "title": "Interpretar una asignación",
+          "prompt": "¿Qué hace la instrucción edad = 7?",
+          "code": "edad = 7",
+          "hints": [
+            "Observa qué símbolo aparece entre el nombre y el valor.",
+            "En Python, = guarda un valor; == se usa para comparar."
+          ],
+          "options": [
+            {
+              "id": "asigna",
+              "text": "Guarda 7 en la variable edad"
+            },
+            {
+              "id": "compara",
+              "text": "Compara edad con 7",
+              "retry": "Busca el operador que Python usa para comparar dos valores."
+            },
+            {
+              "id": "imprime",
+              "text": "Muestra 7 en pantalla"
+            }
+          ],
+          "answerId": "asigna",
+          "retry": "Piensa en la diferencia entre asignar un valor y mostrarlo.",
+          "explanation": "El signo = asigna el valor 7 a la variable edad; no muestra nada en pantalla."
+        },
+        {
           "id": "cumpleanos",
+          "type": "code",
           "title": "Un valor que cambia",
           "prompt": "Guarda 20 en edad. Después aumenta su valor en 1 usando la variable y muestra la nueva edad: 21.",
           "starter": "# Un año más\nedad = 20\n# Actualiza edad aquí\nprint(edad)",
@@ -61,6 +92,7 @@
       "exercises": [
         {
           "id": "total-compra",
+          "type": "code",
           "title": "Calcula una compra",
           "prompt": "Guarda 8 en precio y 3 en cantidad. Calcula total multiplicando ambas variables y muestra 24.",
           "starter": "precio = 8\ncantidad = 3\ntotal = 0\nprint(total)",
@@ -74,6 +106,7 @@
         },
         {
           "id": "mensaje-puntos",
+          "type": "code",
           "title": "Un mensaje con resultado",
           "prompt": "Suma 10 + 5 y guarda el resultado en puntos. Muestra exactamente Puntos: 15 usando print() con texto y la variable.",
           "starter": "puntos = 0\nprint(\"Puntos:\", puntos)",
@@ -103,6 +136,7 @@
       "exercises": [
         {
           "id": "entrada-edad",
+          "type": "code",
           "title": "Una decisión por edad",
           "prompt": "Guarda 20 en edad. Usa if para mostrar Puede entrar si edad es mayor o igual a 18; en caso contrario, muestra Debe esperar.",
           "starter": "edad = 20\n# Compara edad y elige un mensaje",
@@ -116,6 +150,7 @@
         },
         {
           "id": "par-impar",
+          "type": "code",
           "title": "¿Par o impar?",
           "prompt": "Guarda 7 en numero. Si numero % 2 == 0, muestra Par; en caso contrario, muestra Impar.",
           "starter": "numero = 7\n# Decide si el número es par o impar",
@@ -145,6 +180,7 @@
       "exercises": [
         {
           "id": "contar-tres",
+          "type": "code",
           "title": "Cuenta hasta tres",
           "prompt": "Usa for y range() para mostrar 1, 2 y 3, cada uno en una línea.",
           "starter": "for numero in range(1, 2):\n    print(numero)",
@@ -158,6 +194,7 @@
         },
         {
           "id": "sumar-cuatro",
+          "type": "code",
           "title": "Suma paso a paso",
           "prompt": "Empieza con total = 0 y numero = 1. Usa while para sumar los números del 1 al 4 en total. Aumenta numero en cada vuelta y al terminar muestra total: 10.",
           "starter": "total = 0\nnumero = 1\n# Acumula los números con while\nprint(total)",
@@ -187,6 +224,7 @@
       "exercises": [
         {
           "id": "doble",
+          "type": "code",
           "title": "El doble de un número",
           "prompt": "Define doble(numero) para devolver el número multiplicado por 2. Muestra doble(4): 8. Comprobaremos también otros números.",
           "starter": "def doble(numero):\n    return 0\n\nprint(doble(4))",
@@ -200,6 +238,7 @@
         },
         {
           "id": "saludar",
+          "type": "code",
           "title": "Un saludo reutilizable",
           "prompt": "Define saludar(nombre) para devolver el texto \"Hola, \" seguido del nombre recibido. Muestra saludar(\"Ada\"): Hola, Ada. Debe funcionar con otros nombres.",
           "starter": "def saludar(nombre):\n    return \"\"\n\nprint(saludar(\"Ada\"))",
@@ -229,6 +268,7 @@
       "exercises": [
         {
           "id": "lista-frutas",
+          "type": "code",
           "title": "Una lista que crece",
           "prompt": "Crea frutas con \"manzana\" y \"pera\", en ese orden. Añade \"uva\" al final con append() y muestra el segundo elemento: pera.",
           "starter": "frutas = [\"manzana\", \"pera\"]\n# Añade una fruta y muestra el segundo elemento",
@@ -242,6 +282,7 @@
         },
         {
           "id": "ficha-persona",
+          "type": "code",
           "title": "Una ficha con claves",
           "prompt": "Crea persona con las claves \"nombre\" (\"Ada\") y \"edad\" (20). Aumenta la edad en 1 y muestra ambos valores: Ada 21.",
           "starter": "persona = {\"nombre\": \"Ada\", \"edad\": 20}\n# Actualiza la edad y muestra los datos",

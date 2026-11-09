@@ -1,7 +1,7 @@
 import {readFile,writeFile,readdir,mkdir,access} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {validateSvgIcon} from "./svgIcon.js";
-import {validateCatalog,validateCourse} from './content-contract.mjs';
+import {validateCatalog,validateCourse,validateSourceCourse,validateSourceLearningPaths} from './content-contract.mjs';
 const hash = value => createHash('sha256').update(value).digest('hex');
 await mkdir('public/icons',{recursive:true});
 async function publishIcon(item) {
@@ -17,10 +17,16 @@ async function publishIcon(item) {
   item.icon={file,sha256};
 }
 const learningPaths = JSON.parse(await readFile('content/learning-paths.json','utf8'));
-for(const path of learningPaths)await publishIcon(path);
-const documents = [];
+const sourceDocuments = [];
 for (const name of (await readdir('content/courses')).filter(n=>n.endsWith('.json')).sort()) {
   const course=JSON.parse(await readFile(`content/courses/${name}`,'utf8'));
+  validateSourceCourse(course,course.id);
+  sourceDocuments.push({course,name});
+}
+validateSourceLearningPaths(learningPaths,sourceDocuments.map(({course}) => course.id));
+for(const path of learningPaths)await publishIcon(path);
+const documents = [];
+for (const {course} of sourceDocuments) {
   await publishIcon(course);
   for(const topic of course.topics || [])await publishIcon(topic);
   validateCourse(course,course.id);

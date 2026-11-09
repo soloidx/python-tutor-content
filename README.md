@@ -11,7 +11,9 @@ Requiere Node.js 22. Ejecuta `npm ci` para instalar el validador XML del subconj
 3. Incluye `content/` y los cambios generados en `public/` en el mismo commit.
 4. Un push a `main` valida y despliega `public/` mediante GitHub Actions. Los PR solo validan.
 
-Los archivos de curso llevan su SHA-256 en el nombre y se conservan entre publicaciones. El catálogo se genera después de todos los cursos. No borres archivos publicados antiguos ni cambies su contenido.
+Los archivos de curso llevan su SHA-256 en el nombre y se conservan entre publicaciones. El catálogo se genera después de todos los cursos. No borres archivos publicados antiguos ni cambies su contenido. Las fuentes nuevas declaran `type: "code"` o `type: "choice"` en cada ejercicio; el publicador conserva y valida como código los documentos históricos que no tenían tipo.
+
+El orden operativo coordinado es: preparar primero un consumidor compatible; validar y construir las fuentes; subir cursos e iconos inmutables nuevos; y actualizar `public/catalog.json` al final. La aplicación activa la revisión en la siguiente recarga y conserva el respaldo válido si una actualización falla. Este repositorio no despliega como parte del trabajo de autoría local.
 
 ## Generar desde un tópico
 
