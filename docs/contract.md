@@ -141,3 +141,30 @@ A topic may instead publish a `walkthrough` of `type: "sequence"` with a nonempt
 A topic may embed a `walkthrough` of type `collection`. Its nonempty `groups` have unique IDs, labels, and nonempty `elements` with globally unique IDs and nonempty `key` and `value` strings. Keys are unique within each group. Its nonempty `steps` reference element IDs and provide a one-based example `line`, an `explanation`, and optional nonempty `output`. Elements without steps remain visible. Steps are ordered; output accumulates through the current step. Editable publisher sources reference a walkthrough JSON file under `content/walkthroughs/`; the builder embeds it in the immutable course document. Existing walkthrough types and publications without walkthroughs remain valid.
 
 Collection elements may declare `introducedAt` as a one-based step number, hiding them until that step. An omitted value keeps the element visible from the start; steps cannot reference it before introduction.
+
+## Recorridos SVG
+
+Los recorridos nuevos se escriben con `type: "svg"`. La lección conserva una referencia `walkthroughs/<slug>.json`. En ese archivo, `graphics` asocia IDs a rutas `walkthroughs/graphics/<slug>.svg`. El publicador resuelve las rutas dentro de `content`, valida el XML y las referencias de los pasos e incorpora el texto de cada SVG al JSON inmutable del curso. Las huellas del curso y el respaldo del catálogo cubren el gráfico sin solicitar archivos adicionales.
+
+| Campo | Comportamiento |
+| --- | --- |
+| `code` | Opcional. `true` muestra `topic.example` junto al gráfico. |
+| `scenarios` | Lista ordenada y no vacía. Cada escenario tiene `id`, `label`, `graphic` y `steps`. Varios escenarios pueden usar el mismo gráfico. |
+| `replacement` | Opcional en un escenario con código. `line` cuenta desde 1 y `code` sustituye una sola línea. |
+| `explanation` | Texto obligatorio del paso. |
+| `line` | Línea opcional que se resalta con código visible. Cuenta desde 1. |
+| `output` | Texto opcional de la salida completa del paso. Al omitirlo se oculta el resultado. |
+| `highlight`, `animate` | Listas opcionales de `data-part` para resaltar o animar al entrar al paso. |
+| `show`, `hide` | Listas opcionales de `data-part` que cambian la visibilidad de la escena base para ese paso. Repite las partes que deban aparecer en pasos siguientes. |
+
+El SVG raíz requiere `xmlns="http://www.w3.org/2000/svg"` y un `viewBox` con ancho y alto positivos. Cada `data-part` es un slug único en el gráfico. `data-hidden="true"` oculta una parte en la escena base. La raíz admite geometría estática y texto con `g`, `path`, `rect`, `circle`, `ellipse`, `line`, `polyline`, `polygon`, `text`, `tspan`, `title` y `desc`. Los atributos permitidos están en [walkthroughSvg.js](../scripts/walkthroughSvg.js). El reproductor crea los elementos permitidos y controla el estilo. Usa roles de estilo en lugar de CSS, JavaScript o referencias URL en el archivo.
+
+| `data-style` | Uso |
+| --- | --- |
+| `surface` | Relleno y borde de cajas, celdas y formas de decisión. |
+| `label` | Texto principal de un nodo o valor. |
+| `caption` | Etiqueta secundaria. |
+| `connector` | Trazo de una línea o ruta. |
+| `arrowhead` | Relleno del polígono de una punta de flecha. |
+
+Los tipos `decision`, `sequence` y `collection` siguen siendo válidos para contenido anterior. Actualiza el consumidor antes de publicar un curso con recorridos SVG.

@@ -222,7 +222,7 @@
         }
       ],
       "icon": "icons/topic.svg",
-      "walkthrough": "walkthroughs/condicionales.json"
+      "walkthrough": "walkthroughs/condicionales-svg.json"
     },
     {
       "id": "bucles",

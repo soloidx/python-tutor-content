@@ -1,5 +1,6 @@
 import { readdir, readFile, writeFile, mkdir, realpath } from 'node:fs/promises';
 import { join } from 'node:path';
+import { readWalkthrough } from './read-walkthrough.mjs';
 import { validateWalkthrough } from './walkthrough.js';
 const slug = value => typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
 const json = async file => JSON.parse(await readFile(file,'utf8'));
@@ -26,10 +27,16 @@ async function walkthroughPath(root,ref,existing=true) {
 export async function openTopic(root,courseId,topicId) {
  const {topic}=await locate(root,courseId,topicId);
  const walkthrough=topic.walkthrough ? await json(await walkthroughPath(root,topic.walkthrough)) : null;
- return {example:topic.example,walkthrough};
+ return {
+  example:topic.example,
+  walkthrough:walkthrough?.type==='svg' ? await readWalkthrough(root,topic.walkthrough,topic.example) : walkthrough,
+ };
 }
 export async function saveTopic(root,courseId,topicId,value) {
  const {name,course,topic}=await locate(root,courseId,topicId);
+ if(value?.type==='svg' || (topic.walkthrough && (await json(await walkthroughPath(root,topic.walkthrough))).type==='svg')) {
+  throw Error('Edita el JSON y el SVG del recorrido en el repositorio de contenido.');
+ }
  validateWalkthrough(value,topic.example);
  const ref=topic.walkthrough || `walkthroughs/${courseId}-${topicId}.json`;
  const file=await walkthroughPath(root,ref,!!topic.walkthrough);

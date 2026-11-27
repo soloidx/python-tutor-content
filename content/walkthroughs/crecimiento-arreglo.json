@@ -1,0 +1,34 @@
+{
+  "type": "svg",
+  "graphics": { "memoria": "walkthroughs/graphics/crecimiento-arreglo.svg" },
+  "scenarios": [
+    {
+      "id": "agregar",
+      "label": "Agregar 30",
+      "graphic": "memoria",
+      "steps": [
+        {
+          "explanation": "El arreglo tiene dos valores y sus dos celdas están ocupadas.",
+          "highlight": ["origen"]
+        },
+        {
+          "explanation": "Se reserva un bloque nuevo con capacidad para cuatro valores.",
+          "show": ["destino"],
+          "highlight": ["destino"]
+        },
+        {
+          "explanation": "Se copian los valores 10 y 20 al bloque nuevo.",
+          "show": ["destino", "copiados", "flecha-copia"],
+          "highlight": ["copiados"],
+          "animate": ["flecha-copia"]
+        },
+        {
+          "explanation": "Se agrega 30 y se libera el bloque original. Quedan tres valores y una celda libre.",
+          "show": ["destino", "copiados", "agregado"],
+          "hide": ["origen"],
+          "highlight": ["agregado"]
+        }
+      ]
+    }
+  ]
+}

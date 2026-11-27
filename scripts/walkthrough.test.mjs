@@ -3,10 +3,11 @@ import { readFile, mkdtemp, cp, symlink, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { readWalkthrough } from './read-walkthrough.mjs';
 import { validateSourceCourse, validateCourse } from './content-contract.mjs';
 const course = JSON.parse(await readFile('content/courses/python-fundamentos.json','utf8'));
 const topic = course.topics.find(t => t.id === 'condicionales');
-const source = JSON.parse(await readFile(`content/${topic.walkthrough}`,'utf8'));
+const source = await readWalkthrough(process.cwd(),topic.walkthrough,topic.example);
 validateSourceCourse(course,course.id);
 for (const value of ['../escape.json', '/absolute.json', 'walkthroughs/%2e.json']) {
  const copy=structuredClone(course); copy.topics.find(t=>t.id==='condicionales').walkthrough=value;
@@ -14,14 +15,23 @@ for (const value of ['../escape.json', '/absolute.json', 'walkthroughs/%2e.json'
 }
 const published=JSON.parse(await readFile(`public/${JSON.parse(await readFile('public/catalog.json','utf8')).courses.find(c=>c.id===course.id).file}`,'utf8'));
 assert.deepEqual(published.topics.find(t=>t.id==='condicionales').walkthrough,source);
-for (const mutation of [w=>w.type='unknown', w=>w.scenarios[0].steps[0].line=999, w=>w.scenarios[0].steps[0].element='missing', w=>w.scenarios[1].id=w.scenarios[0].id]) {
+for (const mutation of [w=>w.type='unknown', w=>w.scenarios[0].steps[0].line=999, w=>w.scenarios[0].steps[0].highlight=['missing'], w=>w.scenarios[1].id=w.scenarios[0].id]) {
  const copy=structuredClone(published); mutation(copy.topics.find(t=>t.id==='condicionales').walkthrough);
  assert.throws(()=>validateCourse(copy,copy.id));
 }
+const array = await readWalkthrough(process.cwd(), 'walkthroughs/crecimiento-arreglo.json', topic.example);
+assert.equal(array.code, undefined);
+assert.deepEqual(array.scenarios[0].steps[3].hide, ['origen']);
 const dir=await mkdtemp(join(tmpdir(),'walkthrough-'));
 try {
  await cp('content',join(dir,'content'),{recursive:true}); await cp('scripts',join(dir,'scripts'),{recursive:true});
  await symlink(join(process.cwd(),'node_modules'),join(dir,'node_modules'));
+ const graphic = join(dir,'content/walkthroughs/graphics/condicionales.svg');
+ await rm(graphic);
+ await symlink('/etc/hosts',graphic);
+ assert.notEqual(spawnSync(process.execPath,['scripts/build.mjs'],{cwd:dir}).status,0,'graphic symlink escaping content must fail');
+ await rm(graphic);
+ await cp('content/walkthroughs/graphics/condicionales.svg',graphic);
  await rm(join(dir,'content',topic.walkthrough));
  assert.notEqual(spawnSync(process.execPath,['scripts/build.mjs'],{cwd:dir}).status,0,'missing source must fail');
  await symlink('/etc/hosts',join(dir,'content',topic.walkthrough));

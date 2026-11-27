@@ -66,6 +66,13 @@ test('editor previews, saves, reopens and exports independent sequence orders', 
     await page.reload(); await page.getByLabel('Curso').selectOption('python-fundamentos'); await page.getByLabel('Tema').selectOption('funciones');
     await page.getByRole('heading',{name:'Vista previa'}).waitFor();
     assert.deepEqual(await page.locator('.walkthrough-diagram .walkthrough-element').allTextContents(),['Inicio','Otro']);
+    await page.getByLabel('Tema').selectOption('condicionales');
+    await page.getByRole('button',{name:'23',exact:true}).click();
+    await page.getByRole('button',{name:'Siguiente',exact:true}).click();
+    assert.equal(await page.locator('[data-part="flecha-falso"][data-walkthrough-animate]').count(),1);
+    await page.getByRole('button',{name:'Siguiente',exact:true}).click();
+    assert.equal(await page.getByLabel('Salida del recorrido').textContent(),'Hace fresco');
+    assert.equal(await page.getByRole('button',{name:'Guardar',exact:true}).count(),0);
    }
    await page.close();
   }

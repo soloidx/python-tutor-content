@@ -1,0 +1,117 @@
+{
+  "type": "svg",
+  "code": true,
+  "graphics": {
+    "flujo": "walkthroughs/graphics/condicionales.svg"
+  },
+  "scenarios": [
+    {
+      "id": "25",
+      "label": "25",
+      "graphic": "flujo",
+      "replacement": {
+        "line": 1,
+        "code": "temperatura = 25"
+      },
+      "steps": [
+        {
+          "line": 1,
+          "explanation": "La temperatura es 25.",
+          "highlight": [
+            "asignacion"
+          ]
+        },
+        {
+          "line": 2,
+          "explanation": "25 >= 24 es verdadero.",
+          "highlight": [
+            "condicion"
+          ],
+          "animate": [
+            "flecha-verdadero"
+          ]
+        },
+        {
+          "line": 3,
+          "explanation": "Se muestra Hace calor.",
+          "highlight": [
+            "rama-if"
+          ],
+          "output": "Hace calor"
+        }
+      ]
+    },
+    {
+      "id": "24",
+      "label": "24",
+      "graphic": "flujo",
+      "replacement": {
+        "line": 1,
+        "code": "temperatura = 24"
+      },
+      "steps": [
+        {
+          "line": 1,
+          "explanation": "La temperatura es 24.",
+          "highlight": [
+            "asignacion"
+          ]
+        },
+        {
+          "line": 2,
+          "explanation": "24 >= 24 es verdadero.",
+          "highlight": [
+            "condicion"
+          ],
+          "animate": [
+            "flecha-verdadero"
+          ]
+        },
+        {
+          "line": 3,
+          "explanation": "Se muestra Hace calor.",
+          "highlight": [
+            "rama-if"
+          ],
+          "output": "Hace calor"
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "label": "23",
+      "graphic": "flujo",
+      "replacement": {
+        "line": 1,
+        "code": "temperatura = 23"
+      },
+      "steps": [
+        {
+          "line": 1,
+          "explanation": "La temperatura es 23.",
+          "highlight": [
+            "asignacion"
+          ]
+        },
+        {
+          "line": 2,
+          "explanation": "23 >= 24 es falso.",
+          "highlight": [
+            "condicion"
+          ],
+          "animate": [
+            "flecha-falso"
+          ]
+        },
+        {
+          "line": 5,
+          "explanation": "Se muestra Hace fresco.",
+          "highlight": [
+            "rama-else"
+          ],
+          "output": "Hace fresco"
+        }
+      ]
+    }
+  ]
+}

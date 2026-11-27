@@ -13,6 +13,8 @@ Use ASCII slug IDs. Preserve identities for wording/check corrections; use new I
 
 For a resource-specific icon, create a static SVG in `content/icons/<slug>.svg` and set `"icon": "icons/<slug>.svg"` on the source learning path, course or topic. Reuse an icon when appropriate; omit it for the app's default category icon. Read the SVG subset in `docs/contract.md`: outline text and use geometry/presentation attributes; scripts, CSS/style, embedded images, animation and URL references are not supported. Root xmlns/viewBox and at most 100 KiB are required. The publisher computes hashes and references; never insert SVG markup into course text, or handwrite published icon objects in authoring sources. Keep old hashed icons and include originals plus generated artifacts in the commit.
 
+For a new interactive lesson walkthrough, use [author-svg-walkthrough](../author-svg-walkthrough/SKILL.md) to design and validate the SVG and JSON.
+
 Edit source JSON in `content/`, then run `npm run build` and `npm run check`. Review the resulting manifest and files under `public/`. Hashed course and icon files are immutable; keep old published files so clients can finish earlier downloads. Commit source and generated changes together. A new publication revision is derived from the complete manifest. Do not manually invent hashes or revisions.
 
 Report the course/topic identities, learning objectives, validation performed and any unverified pedagogical/runtime assumptions. Publishing or pushing requires authorization from the current task; generating content alone does not authorize deployment.

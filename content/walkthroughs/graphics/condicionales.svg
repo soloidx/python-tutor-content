@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 318">
+  <title>Flujo de un condicional con dos ramas</title>
+  <desc>Se asigna una temperatura y se compara con 24. Verdadero lleva a if y falso lleva a else.</desc>
+
+  <g data-part="asignacion">
+    <rect data-style="surface" x="140" y="8" width="200" height="42" rx="10" stroke-width="2"/>
+    <text data-style="label" x="240" y="35" text-anchor="middle" font-size="18">Asignar temperatura</text>
+  </g>
+  <line data-style="connector" x1="240" y1="50" x2="240" y2="69" stroke-width="2"/>
+  <polygon data-style="arrowhead" points="235,66 245,66 240,74"/>
+
+  <g data-part="condicion">
+    <polygon data-style="surface" points="240,74 388,126 240,178 92,126" stroke-width="2"/>
+    <text data-style="label" x="240" y="132" text-anchor="middle" font-size="21">temperatura ≥ 24</text>
+  </g>
+  <g data-part="flecha-verdadero">
+    <path data-style="connector" d="M158 155L110 192V238" stroke-width="2.5"/>
+    <polygon data-style="arrowhead" points="104,235 116,235 110,244"/>
+    <text data-style="caption" x="123" y="217" font-size="18">Verdadero</text>
+  </g>
+  <g data-part="flecha-falso">
+    <path data-style="connector" d="M322 155L370 192V238" stroke-width="2.5"/>
+    <polygon data-style="arrowhead" points="364,235 376,235 370,244"/>
+    <text data-style="caption" x="357" y="217" text-anchor="end" font-size="18">Falso</text>
+  </g>
+  <g data-part="rama-if">
+    <rect data-style="surface" x="14" y="244" width="192" height="66" rx="10" stroke-width="2"/>
+    <text data-style="label" x="110" y="271" text-anchor="middle" font-size="22">if</text>
+    <text data-style="caption" x="110" y="295" text-anchor="middle" font-size="18">Hace calor</text>
+  </g>
+  <g data-part="rama-else">
+    <rect data-style="surface" x="274" y="244" width="192" height="66" rx="10" stroke-width="2"/>
+    <text data-style="label" x="370" y="271" text-anchor="middle" font-size="22">else</text>
+    <text data-style="caption" x="370" y="295" text-anchor="middle" font-size="18">Hace fresco</text>
+  </g>
+</svg>
