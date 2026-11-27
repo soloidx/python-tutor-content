@@ -442,7 +442,8 @@
           "explanation": "frutas[0] es manzana y frutas[1] es pera porque las listas usan índices que comienzan en 0."
         }
       ],
-      "icon": "icons/topic.svg"
+      "icon": "icons/topic.svg",
+      "walkthrough": "walkthroughs/listas-diccionarios.json"
     }
   ],
   "assessment": {
