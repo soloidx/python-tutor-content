@@ -18,7 +18,16 @@ test('editor previews, saves, reopens and exports independent sequence orders', 
    const page=await browser.newPage({viewport:{width,height:844},acceptDownloads:true});
    await page.goto('http://127.0.0.1:5188/');
    await page.getByLabel('Curso').selectOption('python-fundamentos');
-   await page.getByLabel('Tema').selectOption('bucles');
+   if(width===1280){
+    let release; const delayed=new Promise(resolve=>{release=resolve}); let started; const received=new Promise(resolve=>{started=resolve});
+    await page.route('**/api/topic?*',async route=>{if(new URL(route.request().url()).searchParams.get('topic')==='funciones'){const response=await route.fetch();started();await delayed;await route.fulfill({response});}else await route.continue()});
+    await page.getByLabel('Tema').selectOption('funciones'); await received;
+    await page.getByLabel('Tema').selectOption('bucles'); await page.getByRole('heading',{name:'Vista previa'}).waitFor(); release();
+    await page.waitForTimeout(300);
+    assert.equal(await page.getByLabel('Tema').inputValue(),'bucles');
+    assert.equal(await page.locator('.walkthrough-diagram .walkthrough-element').first().textContent(),'Iniciar el bucle');
+    await page.unroute('**/api/topic?*');
+   } else await page.getByLabel('Tema').selectOption('bucles');
    await page.getByRole('heading',{name:'Vista previa'}).waitFor();
    assert.deepEqual(await page.locator('.walkthrough-diagram .walkthrough-element').allTextContents(),['Iniciar el bucle','Vuelta 1','Vuelta 2','Vuelta 3','Después del bucle']);
    await page.getByRole('button',{name:'Después del bucle',exact:true}).click();
@@ -75,7 +84,7 @@ test('collection editor previews, validates, saves and exports', async () => {
    await page.goto('http://127.0.0.1:5189/'); await page.getByLabel('Curso').selectOption('python-fundamentos'); await page.getByLabel('Tema').selectOption('listas-diccionarios');
    await page.getByRole('heading',{name:'Vista previa'}).waitFor();
    assert.equal(await page.getByRole('heading',{name:'Colección'}).count(),1);
-   await page.getByRole('button',{name:'0: rojo'}).click(); assert.equal(await page.getByLabel('Salida del recorrido').textContent(),'rojo');
+   assert.equal(await page.locator('.walkthrough-diagram').getByText('verde',{exact:true}).count(),0); await page.getByRole('button',{name:'Siguiente',exact:true}).click(); assert.equal(await page.locator('.walkthrough-diagram').getByText('verde',{exact:true}).count(),1); await page.getByRole('button',{name:'Siguiente',exact:true}).click(); assert.equal(await page.getByLabel('Salida del recorrido').textContent(),'rojo');
    await page.getByRole('button',{name:'titulo: Python'}).click(); assert.equal(await page.getByLabel('Salida del recorrido').textContent(),'rojo\nPython');
    assert.equal(await page.locator('.walkthrough-diagram div.walkthrough-entry').count()>0,true);
    assert.equal(await page.getByText('verde',{exact:false}).first().isVisible(),true);
@@ -86,12 +95,12 @@ test('collection editor previews, validates, saves and exports', async () => {
     const added=groups.first().locator('fieldset').last();
     await added.getByLabel('Clave o índice').fill('0'); await added.getByLabel('Valor').fill('amarillo');
     assert.equal(await page.getByRole('button',{name:'Guardar',exact:true}).isDisabled(),true);
-    await added.getByLabel('Clave o índice').fill('3');
+    await added.getByLabel('Clave o índice').fill('3'); await added.getByLabel('Aparece en el paso').selectOption('2');
     await page.getByRole('button',{name:'Guardar',exact:true}).click(); await page.getByText('Guardado en el checkout.').waitFor();
     const downloadPromise=page.waitForEvent('download'); await page.getByRole('button',{name:'Exportar JSON'}).click();
-    const exported=JSON.parse(await readFile(await (await downloadPromise).path(),'utf8')); assert.equal(exported.groups[0].elements.at(-1).value,'amarillo');
+    const exported=JSON.parse(await readFile(await (await downloadPromise).path(),'utf8')); assert.equal(exported.groups[0].elements.at(-1).value,'amarillo'); assert.equal(exported.groups[0].elements.at(-1).introducedAt,2);
     await page.reload(); await page.getByLabel('Curso').selectOption('python-fundamentos'); await page.getByLabel('Tema').selectOption('listas-diccionarios');
-    await page.getByRole('heading',{name:'Vista previa'}).waitFor(); assert.equal(await page.locator('.walkthrough-diagram').getByText('amarillo', {exact:true}).count(),1);
+    await page.getByRole('heading',{name:'Vista previa'}).waitFor(); assert.equal(await page.locator('.walkthrough-diagram').getByText('amarillo', {exact:true}).count(),0); await page.getByRole('button',{name:'Siguiente',exact:true}).click(); assert.equal(await page.locator('.walkthrough-diagram').getByText('amarillo', {exact:true}).count(),1);
    }
    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),true);
    if(width===390){

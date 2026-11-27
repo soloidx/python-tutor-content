@@ -139,3 +139,5 @@ A topic may instead publish a `walkthrough` of `type: "sequence"` with a nonempt
 ### Collection walkthroughs
 
 A topic may embed a `walkthrough` of type `collection`. Its nonempty `groups` have unique IDs, labels, and nonempty `elements` with globally unique IDs and nonempty `key` and `value` strings. Keys are unique within each group. Its nonempty `steps` reference element IDs and provide a one-based example `line`, an `explanation`, and optional nonempty `output`. Elements without steps remain visible. Steps are ordered; output accumulates through the current step. Editable publisher sources reference a walkthrough JSON file under `content/walkthroughs/`; the builder embeds it in the immutable course document. Existing walkthrough types and publications without walkthroughs remain valid.
+
+Collection elements may declare `introducedAt` as a one-based step number, hiding them until that step. An omitted value keeps the element visible from the start; steps cannot reference it before introduction.
