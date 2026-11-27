@@ -33,8 +33,10 @@ La URL pública es `https://www.ider.ninja/python-tutor-content/catalog.json`. P
 
 Guarda los SVG originales en `content/icons/` y añade `"icon": "icons/<slug>.svg"` a una ruta, curso o tema en `content/`. Es opcional: sin el campo, la app muestra un icono predeterminado. `npm run build` genera los archivos inmutables en `public/icons/` y sus referencias con SHA-256; `npm run check` verifica publicación, integridad y el subconjunto SVG estático. No se permiten scripts, eventos, CSS, animaciones ni referencias externas. El contrato completo está en `docs/contract.md` y la skill `$generate-python-content` incluye estas reglas. Los iconos se conservan en el respaldo local del tutor junto con el contenido.
 
-## Editor local de recorridos de Decisión
+## Editor local de recorridos
 
 Con Node.js 22 y `npm ci`, ejecuta `npm run editor` y abre la dirección local mostrada. El editor lee y escribe el checkout actual. Necesita un checkout compatible de la aplicación en `../python_tutor`: importa su componente y sus estilos para que la vista previa sea la misma que usa el estudiante. Si está en otro lugar, ejecuta `PYTHON_TUTOR_DIR=/ruta/al/python_tutor npm run editor`. No expongas el servidor local a la red.
 
-Selecciona curso y tema; si no tiene recorrido, empieza uno nuevo. Edita etiquetas, escenarios, reemplazos y pasos; la vista previa aparece cuando el documento es válido. Guardar actualiza el JSON fuente y, al crear, añade su referencia al tema. Exportar descarga el recorrido sin modificar el checkout. Ambos requieren un documento válido. Revisa los cambios con Git y ejecuta `npm run build` y `npm run check` antes de publicar, conservando los archivos inmutables anteriores.
+Selecciona curso y tema; si no tiene recorrido, empieza uno nuevo. Elige Decisión o Secuencia al crear un recorrido. En Secuencia, añade y ordena elementos y pasos por separado; cada paso señala una línea y un elemento, y puede añadir salida. Edita etiquetas, escenarios, reemplazos y pasos; la vista previa aparece cuando el documento es válido. Guardar actualiza el JSON fuente y, al crear, añade su referencia al tema. Exportar descarga el recorrido sin modificar el checkout. Ambos requieren un documento válido. Revisa los cambios con Git y ejecuta `npm run build` y `npm run check` antes de publicar, conservando los archivos inmutables anteriores.
+
+Para verificar el editor en Chrome, ejecuta npm run test:editor-browser con PYTHON_TUTOR_DIR apuntando al checkout de la aplicación. La prueba usa una copia temporal del checkout.
