@@ -1,0 +1,17 @@
+{
+  "type": "sequence",
+  "elements": [
+    { "id": "inicio", "label": "Iniciar el bucle" },
+    { "id": "vuelta-1", "label": "Vuelta 1" },
+    { "id": "vuelta-2", "label": "Vuelta 2" },
+    { "id": "vuelta-3", "label": "Vuelta 3" },
+    { "id": "fin", "label": "Después del bucle" }
+  ],
+  "steps": [
+    { "element": "inicio", "line": 1, "explanation": "range(1, 4) prepara los valores 1, 2 y 3." },
+    { "element": "vuelta-1", "line": 2, "explanation": "paso vale 1 y se muestra Paso 1.", "output": "Paso 1" },
+    { "element": "vuelta-2", "line": 2, "explanation": "paso vale 2 y se muestra Paso 2.", "output": "Paso 2" },
+    { "element": "vuelta-3", "line": 2, "explanation": "paso vale 3 y se muestra Paso 3.", "output": "Paso 3" },
+    { "element": "fin", "line": 3, "explanation": "El bucle termina y se muestra Listo.", "output": "Listo" }
+  ]
+}

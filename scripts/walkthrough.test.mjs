@@ -28,3 +28,20 @@ try {
  assert.notEqual(spawnSync(process.execPath,['scripts/build.mjs'],{cwd:dir}).status,0,'symlink escaping content must fail');
 } finally { await rm(dir,{recursive:true,force:true}); }
 console.log('Walkthrough source and publication contracts validated.');
+const sequence = JSON.parse(await readFile('content/walkthroughs/bucles.json','utf8'));
+const loop = course.topics.find(t=>t.id==='bucles');
+const withSequence = structuredClone(published);
+withSequence.topics.find(t=>t.id==='bucles').walkthrough=sequence;
+validateCourse(withSequence, course.id);
+assert.deepEqual(sequence.steps.map(step=>step.element),sequence.elements.map(element=>element.id));
+assert.equal(sequence.steps.flatMap(step=>step.output ? [step.output] : []).join('\n'),'Paso 1\nPaso 2\nPaso 3\nListo');
+for (const mutate of [w=>w.steps[0].element='missing',w=>w.steps.reverse(),w=>w.elements[1].id=w.elements[0].id,w=>w.steps[0].line=999]) {
+ const copy=structuredClone(withSequence); mutate(copy.topics.find(t=>t.id==='bucles').walkthrough);
+ assert.throws(()=>validateCourse(copy,copy.id));
+}
+
+assert.equal(loop.walkthrough, 'walkthroughs/bucles.json');
+assert.deepEqual(published.topics.find(t=>t.id==='bucles').walkthrough, sequence);
+const execution = spawnSync('python3',['-c',loop.example],{encoding:'utf8'});
+assert.equal(execution.status,0);
+assert.equal(execution.stdout,sequence.steps.flatMap(step=>step.output ? [step.output] : []).join('\n')+'\n');

@@ -295,7 +295,8 @@
           "explanation": "range(1, 4) produce 1, 2 y 3: incluye el inicio y excluye el límite final."
         }
       ],
-      "icon": "icons/topic.svg"
+      "icon": "icons/topic.svg",
+      "walkthrough": "walkthroughs/bucles.json"
     },
     {
       "id": "funciones",

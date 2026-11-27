@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": "837fe2c9cd914cdb52f4008f6f7009530ab5ecc8469f3a1de21e583fdd6eb877",
+  "revision": "99b0f3231f4b18a902398f652336b879e190a8c2e06cf09f9cbc1b0d8179f76b",
   "learningPaths": [
     {
       "id": "primeros-pasos",
@@ -31,8 +31,8 @@
   "courses": [
     {
       "id": "python-fundamentos",
-      "file": "courses/python-fundamentos.d97a07cf311b1956ef7e8a6306acd2864b7235ac4db3330f54d2d58b7b525a09.json",
-      "sha256": "d97a07cf311b1956ef7e8a6306acd2864b7235ac4db3330f54d2d58b7b525a09"
+      "file": "courses/python-fundamentos.499ca2ac4151aea249eb7b2d201fbd8117892ab41957b16907504b01ffe3070f.json",
+      "sha256": "499ca2ac4151aea249eb7b2d201fbd8117892ab41957b16907504b01ffe3070f"
     },
     {
       "id": "python-practica",
