@@ -5,12 +5,18 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node scripts/content-contract.test.mjs && node scripts/walkthrough.test.mjs"
+    "test": "node scripts/content-contract.test.mjs && node scripts/walkthrough.test.mjs && node --test scripts/editor.test.mjs",
+    "editor": "vite --config vite.config.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "saxes": "^6.0.0"
+  },
+  "devDependencies": {
+    "vite": "^7.3.8"
   }
 }
