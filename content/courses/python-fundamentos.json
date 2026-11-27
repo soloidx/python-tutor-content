@@ -221,7 +221,8 @@
           "explanation": "18 >= 18 es verdadero, por eso se ejecuta el bloque del if y se muestra Puede entrar."
         }
       ],
-      "icon": "icons/topic.svg"
+      "icon": "icons/topic.svg",
+      "walkthrough": "walkthroughs/condicionales.json"
     },
     {
       "id": "bucles",

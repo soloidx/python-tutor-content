@@ -1,3 +1,4 @@
+import { validateWalkthrough } from "./walkthrough.js";
 import { validateSvgIcon } from "./svgIcon.js";
 // One predetermined public source; publishing and operating it are external to this app.
 export const catalogBaseUrl = "https://www.ider.ninja/python-tutor-content/";
@@ -205,6 +206,11 @@ function validateCourseWithMode(course, expectedId, source) {
     topic.explanation.forEach((paragraph) =>
       text(paragraph, "topic.explanation"),
     );
+    if (topic.walkthrough !== undefined) {
+      if (source) {
+        requireValue(typeof topic.walkthrough === "string" && /^walkthroughs\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/.test(topic.walkthrough), "referencia de recorrido inválida");
+      } else validateWalkthrough(topic.walkthrough, topic.example);
+    }
     list(topic.exercises, "topic.exercises");
     for (const exercise of topic.exercises) {
       validateExercise(exercise, "exercise", source);

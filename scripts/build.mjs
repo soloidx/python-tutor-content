@@ -1,4 +1,4 @@
-import {readFile,writeFile,readdir,mkdir,access} from 'node:fs/promises';
+import {readFile,writeFile,readdir,mkdir,access,realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {validateSvgIcon} from "./svgIcon.js";
 import {validateCatalog,validateCourse,validateSourceCourse,validateSourceLearningPaths} from './content-contract.mjs';
@@ -28,7 +28,15 @@ for(const path of learningPaths)await publishIcon(path);
 const documents = [];
 for (const {course} of sourceDocuments) {
   await publishIcon(course);
-  for(const topic of course.topics || [])await publishIcon(topic);
+  for(const topic of course.topics || []) {
+    await publishIcon(topic);
+    if (topic.walkthrough !== undefined) {
+      const root = await realpath('content');
+      const file = await realpath(`content/${topic.walkthrough}`);
+      if (!file.startsWith(`${root}/`)) throw new Error('Walkthrough outside content tree');
+      topic.walkthrough = JSON.parse(await readFile(file, 'utf8'));
+    }
+  }
   validateCourse(course,course.id);
   const bytes=JSON.stringify(course,null,2)+'\n';
   const sha256=hash(bytes);

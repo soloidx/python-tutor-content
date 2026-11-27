@@ -1,4 +1,5 @@
-import {readFile,readdir} from 'node:fs/promises';
+import {validateWalkthrough} from "./walkthrough.js";
+import {readFile,readdir,realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {validateCatalog,validateCourse,validateSourceCourse,validateSourceLearningPaths,publicationIcons,verifyIconSource} from './content-contract.mjs';
 const sourcePaths=JSON.parse(await readFile('content/learning-paths.json','utf8'));
@@ -6,6 +7,12 @@ const sourceCourses=[];
 for(const name of (await readdir('content/courses')).filter(name=>name.endsWith('.json')).sort()){
  const course=JSON.parse(await readFile(`content/courses/${name}`,'utf8'));
  validateSourceCourse(course,course.id);
+ for (const topic of course.topics) if (topic.walkthrough !== undefined) {
+  const root=await realpath('content'); const file=await realpath(`content/${topic.walkthrough}`);
+  if (!file.startsWith(`${root}/`)) throw new Error('Walkthrough outside content tree');
+  validateWalkthrough(JSON.parse(await readFile(file,'utf8')), topic.example);
+ }
+
  sourceCourses.push(course);
 }
 validateSourceLearningPaths(sourcePaths,sourceCourses.map(course=>course.id));
