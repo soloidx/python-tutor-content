@@ -221,7 +221,8 @@
           "explanation": "18 >= 18 es verdadero, por eso se ejecuta el bloque del if y se muestra Puede entrar."
         }
       ],
-      "icon": "icons/topic.svg"
+      "icon": "icons/topic.svg",
+      "walkthrough": "walkthroughs/condicionales.json"
     },
     {
       "id": "bucles",
@@ -294,7 +295,8 @@
           "explanation": "range(1, 4) produce 1, 2 y 3: incluye el inicio y excluye el límite final."
         }
       ],
-      "icon": "icons/topic.svg"
+      "icon": "icons/topic.svg",
+      "walkthrough": "walkthroughs/bucles.json"
     },
     {
       "id": "funciones",
@@ -440,7 +442,8 @@
           "explanation": "frutas[0] es manzana y frutas[1] es pera porque las listas usan índices que comienzan en 0."
         }
       ],
-      "icon": "icons/topic.svg"
+      "icon": "icons/topic.svg",
+      "walkthrough": "walkthroughs/listas-diccionarios.json"
     }
   ],
   "assessment": {

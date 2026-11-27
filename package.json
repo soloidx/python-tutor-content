@@ -1,1 +1,24 @@
-{"name":"python-tutor-content","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","check":"node scripts/check.mjs","test":"node scripts/content-contract.test.mjs"},"engines":{"node":">=22"},"dependencies":{"saxes":"^6.0.0"}}
+{
+  "name": "python-tutor-content",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node scripts/content-contract.test.mjs && node scripts/walkthrough.test.mjs && node --test scripts/editor.test.mjs",
+    "editor": "vite --config vite.config.mjs",
+    "test:editor-browser": "node --test scripts/editor-browser.test.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "saxes": "^6.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "vite": "^7.3.8"
+  }
+}
