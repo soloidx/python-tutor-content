@@ -174,3 +174,7 @@ Los tipos `decision`, `sequence` y `collection` siguen siendo válidos para cont
 A topic may replace `explanation`, `example`, `takeaway` and `walkthrough` with an ordered, nonempty `lessons` list. Editable entries are `{ "id": "stable-slug", "file": "lessons/example.md" }`; the file must resolve within `content/`. Its first level-one heading is the title. The build embeds each lesson as `{ "id", "title", "markdown" }` in the immutable v1 course. IDs are unique within a topic and stay stable when the title, file or order changes. Courses may mix migrated and legacy topics.
 
 Deploy and verify a compatible Tutor first, including an original historical backup and the mixed course. Run `npm ci`, `npm run build` and `npm run check`; upload new immutable files before updating the catalog index. Retain historical immutable files and the old index for rollback. No production deployment is performed by these commands.
+
+## Recorridos en lecciones Markdown
+
+Un enlace relativo al JSON de un recorrido SVG ocupa un párrafo completo. Con `code: true`, debe seguir a un bloque cercado `python` del mismo nivel; las líneas y reemplazos se validan por aparición contra ese bloque. Sin código, el bloque anterior se conserva. El publicador resuelve el enlace dentro de `content`, empaqueta el recorrido y sus gráficos en `lesson.walkthroughs` en orden, con `code` (texto vinculado o `null`) y `walkthrough`, y conserva el Markdown. El editor lee y valida las mismas fuentes para seleccionar lección y aparición. Los cursos y respaldos contienen todas las escenas necesarias.

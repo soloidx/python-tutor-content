@@ -125,3 +125,23 @@ test('collection editor previews, validates, saves and exports', async () => {
   }
  } finally {await browser?.close();server?.kill();await rm(root,{recursive:true,force:true});}
 });
+
+test('editor selects a lesson and previews its linked code', async () => {
+ const root=await mkdtemp(join(process.cwd(),'.editor-lesson-test-')); let server,browser;
+ try {
+  for(const name of ['content','editor','scripts','vite.config.mjs']) await cp(name,join(root,name),{recursive:true});
+  await cp('node_modules',join(root,'node_modules'),{recursive:true});
+  const {writeFile,mkdir}=await import('node:fs/promises');
+  const file=join(root,'content/courses/python-fundamentos.json'); const course=JSON.parse(await readFile(file,'utf8'));
+  const topic=course.topics.find(t=>t.id==='condicionales'); delete topic.explanation;delete topic.example;delete topic.takeaway;delete topic.walkthrough;
+  topic.lessons=[{id:'one',file:'lessons/one.md'}]; await writeFile(file,JSON.stringify(course));
+  await mkdir(join(root,'content/lessons'),{recursive:true});
+  await writeFile(join(root,'content/lessons/one.md'),'# Condicionales\n\n```python\ntemperatura = 25\nif temperatura >= 24:\n    print("Hace calor")\nelse:\n    print("Hace fresco")\n```\n\n[Recorrido](../walkthroughs/condicionales-svg.json)');
+  server=spawn(process.execPath,[resolve('node_modules/vite/bin/vite.js'),'--config','vite.config.mjs','--port','5197','--strictPort'],{cwd:root,env:{...process.env,PYTHON_TUTOR_DIR:process.env.PYTHON_TUTOR_DIR||resolve('../python_tutor')},stdio:'ignore'});
+  for(let i=0;i<100;i++){try {if((await fetch('http://127.0.0.1:5197/api/courses')).ok)break;}catch{} await new Promise(r=>setTimeout(r,100));if(i===99)throw Error('Editor did not start');}
+  browser=await chromium.launch({headless:true,channel:'chrome'});const page=await browser.newPage();await page.goto('http://127.0.0.1:5197/');
+  await page.getByLabel('Curso').selectOption('python-fundamentos');await page.getByLabel('Tema').selectOption('condicionales');
+  await page.getByLabel('Lección').selectOption('0');await page.locator('label').filter({hasText:'Recorrido'}).locator('select').selectOption('0');
+  await page.getByLabel('Código del recorrido').waitFor();assert.match(await page.getByLabel('Código del recorrido').textContent(),/temperatura = 25/);
+ } finally {await browser?.close();server?.kill();await rm(root,{recursive:true,force:true});}
+});

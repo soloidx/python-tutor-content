@@ -8,8 +8,8 @@ async function readInside(base, reference) {
   return readFile(file, "utf8");
 }
 
-export async function readWalkthrough(root, reference, example) {
-  if (typeof reference !== "string" || !/^walkthroughs\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/.test(reference)) {
+export async function readWalkthrough(root, reference, example, { lesson = false } = {}) {
+  if (typeof reference !== "string" || !(lesson ? /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))[^\\%?#:]+\.json$/.test(reference) : /^walkthroughs\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/.test(reference))) {
     throw new Error("Referencia de recorrido inválida");
   }
   const base = await realpath(resolve(root, "content"));
