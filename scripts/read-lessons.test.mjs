@@ -80,3 +80,14 @@ try {
   await writeFile(file, '# Mezcla\n\n[Visual](../walkthroughs/visual.json)');
   await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
 } finally { await rm(multiRoot,{recursive:true,force:true}); }
+
+const headingRoot = await mkdtemp(join(tmpdir(), 'lesson-heading-'));
+try {
+  await mkdir(join(headingRoot, 'content/lessons'), {recursive:true});
+  const file = join(headingRoot, 'content/lessons/a.md');
+  await writeFile(file, '<div>\n# No es título\n</div>\n\n```md\n# Tampoco\n```\n\n# **Hola** [Python](https://example.com) `3` &amp; más\n');
+  const [lesson] = await readLessons(headingRoot, [{id:'a',file:'lessons/a.md'}]);
+  assert.equal(lesson.title, 'Hola Python 3 & más');
+  await writeFile(file, '<div>\n# No es título\n</div>\n\n```md\n# Tampoco\n```');
+  await assert.rejects(readLessons(headingRoot, [{id:'a',file:'lessons/a.md'}]), /Falta título/);
+} finally { await rm(headingRoot, {recursive:true,force:true}); }
