@@ -1,5 +1,6 @@
 import { readdir, readFile, writeFile, mkdir, realpath } from 'node:fs/promises';
 import { join } from 'node:path';
+import { readLessons } from './read-lessons.mjs';
 import { readWalkthrough } from './read-walkthrough.mjs';
 import { validateWalkthrough } from './walkthrough.js';
 const slug = value => typeof value === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
@@ -26,6 +27,7 @@ async function walkthroughPath(root,ref,existing=true) {
 }
 export async function openTopic(root,courseId,topicId) {
  const {topic}=await locate(root,courseId,topicId);
+ if (topic.lessons) return { lessons: await readLessons(root, topic.lessons) };
  const walkthrough=topic.walkthrough ? await json(await walkthroughPath(root,topic.walkthrough)) : null;
  return {
   example:topic.example,
