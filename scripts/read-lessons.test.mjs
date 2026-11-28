@@ -56,3 +56,27 @@ try {
     ['25', [1,2,3], 'Hace calor'], ['24', [1,2,3], 'Hace calor'], ['23', [1,2,5], 'Hace fresco'],
   ]);
 } finally { await rm(linkedRoot, { recursive:true, force:true }); }
+
+const multiRoot = await mkdtemp(join(tmpdir(), 'multi-lesson-'));
+try {
+  await mkdir(join(multiRoot, 'content/lessons'), {recursive:true});
+  await mkdir(join(multiRoot, 'content/walkthroughs/graphics'), {recursive:true});
+  await writeFile(join(multiRoot, 'content/walkthroughs/graphics/a.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" data-part="box"/></svg>');
+  const demo = {type:'svg',code:true,graphics:{scene:'walkthroughs/graphics/a.svg'},scenarios:[{id:'a',label:'A',graphic:'scene',steps:[{line:2,explanation:'Segunda línea'}]}]};
+  await writeFile(join(multiRoot,'content/walkthroughs/demo.json'), JSON.stringify(demo));
+  await writeFile(join(multiRoot,'content/walkthroughs/visual.json'), JSON.stringify({type:'svg',graphics:demo.graphics,scenarios:[{id:'a',label:'A',graphic:'scene',steps:[{explanation:'Visual'}]}]}));
+  const link = '[Demo](../walkthroughs/demo.json)';
+  const code = value => `\`\`\`python\n${value}\nprint(x)\n\`\`\``;
+  const file = join(multiRoot,'content/lessons/a.md');
+  await writeFile(file, `# Mezcla\n\n${code('x = 1')}\n\n[Visual](../walkthroughs/visual.json)\n\n${code('x = 2')}\n\n${link}\n\n${code('x = 3')}\n\n${link}`);
+  const [lesson] = await readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]);
+  assert.deepEqual(lesson.walkthroughs.map(item => item.code), [null, 'x = 2\nprint(x)', 'x = 3\nprint(x)']);
+  await writeFile(file, `# Mezcla\n\n${code('x = 2')}\n\n${link}\n\n\`\`\`python\nx = 3\n\`\`\`\n\n${link}`);
+  await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
+  await writeFile(file, `# Mezcla\n\n${code('x = 2')}\n\n${link}\n\n${link}`);
+  await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
+  demo.code = false;
+  await writeFile(join(multiRoot,'content/walkthroughs/visual.json'), JSON.stringify(demo));
+  await writeFile(file, '# Mezcla\n\n[Visual](../walkthroughs/visual.json)');
+  await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
+} finally { await rm(multiRoot,{recursive:true,force:true}); }
