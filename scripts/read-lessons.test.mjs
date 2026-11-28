@@ -35,6 +35,12 @@ try {
   const [lesson] = await readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]);
   assert.equal(lesson.walkthroughs.length, 1);
   assert.equal(lesson.walkthroughs[0].code, 'x = 25\nprint(x)');
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n```python\nx = 25\nprint(x)\n```\n\n[Recorrido][demo]\n\n[demo]: ../walkthroughs/example.json');
+  const [referenced] = await readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]);
+  assert.equal(referenced.walkthroughs[0].code, 'x = 25\nprint(x)');
+  await writeFile(join(linkedRoot, 'outside.json'), '{}');
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n[Recorrido](../../outside.json)');
+  await assert.rejects(readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]), /fuera del árbol/);
   await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\nTexto [Recorrido](../walkthroughs/example.json)');
   await assert.rejects(readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]));
   await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n[Recorrido](../walkthroughs/example.json)');
