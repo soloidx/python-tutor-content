@@ -1,3 +1,4 @@
+import {readLessons} from "./read-lessons.mjs";
 import {readWalkthrough} from "./read-walkthrough.mjs";
 import {readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -7,8 +8,9 @@ const sourceCourses=[];
 for(const name of (await readdir('content/courses')).filter(name=>name.endsWith('.json')).sort()){
  const course=JSON.parse(await readFile(`content/courses/${name}`,'utf8'));
  validateSourceCourse(course,course.id);
- for (const topic of course.topics) if (topic.walkthrough !== undefined) {
-  await readWalkthrough(process.cwd(), topic.walkthrough, topic.example);
+ for (const topic of course.topics) {
+  if (topic.lessons !== undefined) await readLessons(process.cwd(), topic.lessons);
+  if (topic.walkthrough !== undefined) await readWalkthrough(process.cwd(), topic.walkthrough, topic.example);
  }
 
  sourceCourses.push(course);

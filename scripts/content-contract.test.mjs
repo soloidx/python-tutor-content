@@ -71,3 +71,11 @@ assert.throws(
 );
 
 console.log("Source and historical exercise contracts validated.");
+
+const migrated = course([codeExercise]);
+const migratedTopic = migrated.topics[0];
+delete migratedTopic.explanation; delete migratedTopic.example; delete migratedTopic.takeaway;
+migratedTopic.lessons = [{ id: "inicio", file: "lessons/inicio.md" }];
+assert.doesNotThrow(() => validateSourceCourse(migrated, "python-fundamentos"));
+assert.throws(() => validateSourceCourse({ ...migrated, topics: [{ ...migratedTopic, lessons: [...migratedTopic.lessons, ...migratedTopic.lessons] }] }, "python-fundamentos"));
+assert.throws(() => validateSourceCourse({ ...migrated, topics: [{ ...migratedTopic, example: "x" }] }, "python-fundamentos"));

@@ -5,7 +5,8 @@
     "description": "Aprende las bases del lenguaje.",
     "courseIds": [
       "python-fundamentos",
-      "python-practica"
+      "python-practica",
+      "curso-prueba-lecciones"
     ],
     "icon": "icons/path.svg"
   },

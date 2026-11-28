@@ -168,3 +168,9 @@ El SVG raíz requiere `xmlns="http://www.w3.org/2000/svg"` y un `viewBox` con an
 | `arrowhead` | Relleno del polígono de una punta de flecha. |
 
 Los tipos `decision`, `sequence` y `collection` siguen siendo válidos para contenido anterior. Actualiza el consumidor antes de publicar un curso con recorridos SVG.
+
+## Markdown lessons
+
+A topic may replace `explanation`, `example`, `takeaway` and `walkthrough` with an ordered, nonempty `lessons` list. Editable entries are `{ "id": "stable-slug", "file": "lessons/example.md" }`; the file must resolve within `content/`. Its first level-one heading is the title. The build embeds each lesson as `{ "id", "title", "markdown" }` in the immutable v1 course. IDs are unique within a topic and stay stable when the title, file or order changes. Courses may mix migrated and legacy topics.
+
+Deploy and verify a compatible Tutor first, including an original historical backup and the mixed course. Run `npm ci`, `npm run build` and `npm run check`; upload new immutable files before updating the catalog index. Retain historical immutable files and the old index for rollback. No production deployment is performed by these commands.
