@@ -8,11 +8,16 @@ export async function readLessons(root, lessons) {
     const path = await realpath(resolve(content, file));
     if (!path.startsWith(content + sep)) throw new Error('La lección debe estar dentro del árbol de contenido');
     const markdown = await readFile(path, 'utf8');
-    let fence = null, title;
+    let fence = null, title, paragraph = [];
     for (const line of markdown.split(/\r?\n/)) {
       const marker = line.match(/^ {0,3}(`{3,}|~{3,})/);
-      if (marker) { if (!fence) fence = marker[1]; else if (marker[1][0] === fence[0] && marker[1].length >= fence.length) fence = null; continue; }
-      if (!fence) { const match = line.match(/^ {0,3}#\s+(.+?)\s*#*\s*$/); if (match) { title = match[1].trim(); break; } }
+      if (marker) { if (!fence) fence = marker[1]; else if (marker[1][0] === fence[0] && marker[1].length >= fence.length) fence = null; paragraph = []; continue; }
+      if (fence) continue;
+      const match = line.match(/^ {0,3}#\s+(.+?)\s*#*\s*$/);
+      if (match) { title = match[1].trim(); break; }
+      if (/^ {0,3}=+\s*$/.test(line) && paragraph.length) { title = paragraph.join(' ').trim(); break; }
+      if (!line.trim() || /^ {0,3}(?:#{1,6}(?:\s|$)|>|[-*+]\s|\d+[.)]\s)/.test(line)) paragraph = [];
+      else paragraph.push(line.trim());
     }
     if (!title) throw new Error(`Falta título de lección: ${file}`);
     return { id, title, markdown };

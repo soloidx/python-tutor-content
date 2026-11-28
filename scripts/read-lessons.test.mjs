@@ -16,3 +16,11 @@ try {
   await writeFile(join(root, 'content/lessons/no-title.md'), 'Sin título');
   await assert.rejects(readLessons(root, [{id:'x',file:'lessons/no-title.md'}]));
 } finally { await rm(root, { recursive:true, force:true }); }
+
+const setextRoot = await mkdtemp(join(tmpdir(), 'lessons-setext-'));
+try {
+  await mkdir(join(setextRoot, 'content/lessons'), { recursive: true });
+  await writeFile(join(setextRoot, 'content/lessons/setext.md'), 'Un título Setext\n================\n\nTexto.\n');
+  const [lesson] = await readLessons(setextRoot, [{id:'setext',file:'lessons/setext.md'}]);
+  assert.equal(lesson.title, 'Un título Setext');
+} finally { await rm(setextRoot, { recursive:true, force:true }); }
