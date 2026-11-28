@@ -1,5 +1,6 @@
 import {readFile,writeFile,readdir,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {readLessons} from "./read-lessons.mjs";
 import {readWalkthrough} from "./read-walkthrough.mjs";
 import {validateSvgIcon} from "./svgIcon.js";
 import {validateCatalog,validateCourse,validateSourceCourse,validateSourceLearningPaths} from './content-contract.mjs';
@@ -31,6 +32,7 @@ for (const {course} of sourceDocuments) {
   await publishIcon(course);
   for(const topic of course.topics || []) {
     await publishIcon(topic);
+    if (topic.lessons !== undefined) topic.lessons = await readLessons(process.cwd(), topic.lessons);
     if (topic.walkthrough !== undefined) {
       topic.walkthrough = await readWalkthrough(process.cwd(), topic.walkthrough, topic.example);
     }

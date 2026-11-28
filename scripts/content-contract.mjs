@@ -200,12 +200,28 @@ function validateCourseWithMode(course, expectedId, source) {
     object(topic, "topic");
     slug(topic.id, "topic.id");
     (source ? validateSourceIcon : validateIcon)(topic.icon);
-    fields(topic, ["title", "summary", "example", "takeaway"], "topic");
+    fields(topic, ["title", "summary"], "topic");
     if (topic.duration !== undefined) text(topic.duration, "topic.duration");
-    list(topic.explanation, "topic.explanation");
-    topic.explanation.forEach((paragraph) =>
-      text(paragraph, "topic.explanation"),
-    );
+    if (topic.lessons !== undefined) {
+      absent(topic, ["explanation", "example", "takeaway", "walkthrough"], "topic");
+      list(topic.lessons, "topic.lessons");
+      for (const lesson of topic.lessons) {
+        object(lesson, "lesson");
+        slug(lesson.id, "lesson.id");
+        if (source) {
+          requireValue(Object.keys(lesson).every(key => ["id", "file"].includes(key)), "campos de lección inválidos");
+          text(lesson.file, "lesson.file");
+        } else {
+          requireValue(Object.keys(lesson).every(key => ["id", "title", "markdown"].includes(key)), "campos de lección inválidos");
+          fields(lesson, ["title", "markdown"], "lesson");
+        }
+      }
+      unique(topic.lessons.map(lesson => lesson.id), "topic.lessons");
+    } else {
+      fields(topic, ["example", "takeaway"], "topic");
+      list(topic.explanation, "topic.explanation");
+      topic.explanation.forEach((paragraph) => text(paragraph, "topic.explanation"));
+    }
     if (topic.walkthrough !== undefined) {
       if (source) {
         requireValue(typeof topic.walkthrough === "string" && /^walkthroughs\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/.test(topic.walkthrough), "referencia de recorrido inválida");

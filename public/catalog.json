@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": "a72a16d59c0b64edae1a1fa448f76588af78a28b6c48772166ab4a0a7adb52bd",
+  "revision": "8a2964931747fc9892b7b4947bc9cd1180baf51f2537ee677f325132df911a54",
   "learningPaths": [
     {
       "id": "primeros-pasos",
@@ -8,7 +8,8 @@
       "description": "Aprende las bases del lenguaje.",
       "courseIds": [
         "python-fundamentos",
-        "python-practica"
+        "python-practica",
+        "curso-prueba-lecciones"
       ],
       "icon": {
         "file": "icons/path.5a73942e182c07505d966a8c138afefec101a6993dfc14c29b7d8f7960aa570c.svg",
@@ -29,6 +30,11 @@
     }
   ],
   "courses": [
+    {
+      "id": "curso-prueba-lecciones",
+      "file": "courses/curso-prueba-lecciones.ae0173bb0038f9ef489ebc88a44464a21297f44238397618f4c2f6ba1eff2bc3.json",
+      "sha256": "ae0173bb0038f9ef489ebc88a44464a21297f44238397618f4c2f6ba1eff2bc3"
+    },
     {
       "id": "python-fundamentos",
       "file": "courses/python-fundamentos.59ba2a1e494d616f1a8bf172bd9aba7122d20f2faf8612417c18fec7489388a9.json",

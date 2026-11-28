@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node scripts/content-contract.test.mjs && node scripts/walkthrough.test.mjs && node --test scripts/editor.test.mjs",
+    "test": "node scripts/content-contract.test.mjs && node scripts/read-lessons.test.mjs && node scripts/walkthrough.test.mjs && node --test scripts/editor.test.mjs",
     "editor": "vite --config vite.config.mjs",
     "test:editor-browser": "node --test scripts/editor-browser.test.mjs"
   },
