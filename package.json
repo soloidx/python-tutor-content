@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "test": "node scripts/content-contract.test.mjs && node scripts/walkthrough.test.mjs && node --test scripts/editor.test.mjs",
+    "test": "node scripts/content-contract.test.mjs && node scripts/read-lessons.test.mjs && node scripts/walkthrough.test.mjs && node --test scripts/editor.test.mjs",
     "editor": "vite --config vite.config.mjs",
     "test:editor-browser": "node --test scripts/editor-browser.test.mjs"
   },
@@ -15,7 +15,9 @@
   "dependencies": {
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "saxes": "^6.0.0"
+    "remark-parse": "^11.0.0",
+    "saxes": "^6.0.0",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@playwright/test": "1.65.0",

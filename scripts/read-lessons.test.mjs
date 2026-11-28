@@ -1,0 +1,93 @@
+import assert from 'node:assert/strict';
+import { mkdtemp, mkdir, writeFile, rm, cp } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { readLessons } from './read-lessons.mjs';
+const root = await mkdtemp(join(tmpdir(), 'lessons-'));
+try {
+  await mkdir(join(root, 'content/lessons'), { recursive: true });
+  await writeFile(join(root, 'content/lessons/a.md'), '# Primer título\n\nEjemplo.\n');
+  await writeFile(join(root, 'content/lessons/b.md'), '# Segundo título\n');
+  const lessons = await readLessons(root, [{id:'b',file:'lessons/b.md'}, {id:'a',file:'lessons/a.md'}]);
+  assert.deepEqual(lessons.map(({id,title}) => [id,title]), [['b','Segundo título'], ['a','Primer título']]);
+  assert.equal(lessons[1].markdown, '# Primer título\n\nEjemplo.\n');
+  await assert.rejects(readLessons(root, [{id:'x',file:'../outside.md'}]));
+  await assert.rejects(readLessons(root, [{id:'x',file:'lessons/missing.md'}]));
+  await writeFile(join(root, 'content/lessons/no-title.md'), 'Sin título');
+  await assert.rejects(readLessons(root, [{id:'x',file:'lessons/no-title.md'}]));
+} finally { await rm(root, { recursive:true, force:true }); }
+
+const setextRoot = await mkdtemp(join(tmpdir(), 'lessons-setext-'));
+try {
+  await mkdir(join(setextRoot, 'content/lessons'), { recursive: true });
+  await writeFile(join(setextRoot, 'content/lessons/setext.md'), 'Un título Setext\n================\n\nTexto.\n');
+  const [lesson] = await readLessons(setextRoot, [{id:'setext',file:'lessons/setext.md'}]);
+  assert.equal(lesson.title, 'Un título Setext');
+} finally { await rm(setextRoot, { recursive:true, force:true }); }
+
+const linkedRoot = await mkdtemp(join(tmpdir(), 'linked-lesson-'));
+try {
+  await mkdir(join(linkedRoot, 'content/lessons'), { recursive: true });
+  await mkdir(join(linkedRoot, 'content/walkthroughs/graphics'), { recursive: true });
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n```python\nx = 25\nprint(x)\n```\n\n[Recorrido](../walkthroughs/example.json)\n');
+  await writeFile(join(linkedRoot, 'content/walkthroughs/example.json'), JSON.stringify({type:'svg',code:true,graphics:{scene:'walkthroughs/graphics/a.svg'},scenarios:[{id:'a',label:'A',graphic:'scene',steps:[{line:2,explanation:'Muestra x'}]}]}));
+  await writeFile(join(linkedRoot, 'content/walkthroughs/graphics/a.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" data-part="box"/></svg>');
+  const [lesson] = await readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]);
+  assert.equal(lesson.walkthroughs.length, 1);
+  assert.equal(lesson.walkthroughs[0].code, 'x = 25\nprint(x)');
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n```python\nx = 25\nprint(x)\n```\n\n[Recorrido][demo]\n\n[demo]: ../walkthroughs/example.json');
+  const [referenced] = await readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]);
+  assert.equal(referenced.walkthroughs[0].code, 'x = 25\nprint(x)');
+  await writeFile(join(linkedRoot, 'outside.json'), '{}');
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n[Recorrido](../../outside.json)');
+  await assert.rejects(readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]), /fuera del árbol/);
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\nTexto [Recorrido](../walkthroughs/example.json)');
+  await assert.rejects(readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]));
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n[Recorrido](../walkthroughs/example.json)');
+  await assert.rejects(readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]));
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Ejemplo\n\n```python\nx = 1\n```\n\n[Recorrido](../walkthroughs/example.json)');
+  await assert.rejects(readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]));
+  await cp('content/walkthroughs/condicionales-svg.json', join(linkedRoot, 'content/walkthroughs/condicionales-svg.json'));
+  await cp('content/walkthroughs/graphics/condicionales.svg', join(linkedRoot, 'content/walkthroughs/graphics/condicionales.svg'));
+  await writeFile(join(linkedRoot, 'content/lessons/a.md'), '# Condicionales\n\n```python\ntemperatura = 25\nif temperatura >= 24:\n    print("Hace calor")\nelse:\n    print("Hace fresco")\n```\n\n[Recorrido](../walkthroughs/condicionales-svg.json)');
+  const [conditional] = await readLessons(linkedRoot, [{id:'a',file:'lessons/a.md'}]);
+  const scenarios = conditional.walkthroughs[0].walkthrough.scenarios;
+  assert.deepEqual(scenarios.map(s => [s.id, s.steps.map(step => step.line), s.steps.at(-1).output]), [
+    ['25', [1,2,3], 'Hace calor'], ['24', [1,2,3], 'Hace calor'], ['23', [1,2,5], 'Hace fresco'],
+  ]);
+} finally { await rm(linkedRoot, { recursive:true, force:true }); }
+
+const multiRoot = await mkdtemp(join(tmpdir(), 'multi-lesson-'));
+try {
+  await mkdir(join(multiRoot, 'content/lessons'), {recursive:true});
+  await mkdir(join(multiRoot, 'content/walkthroughs/graphics'), {recursive:true});
+  await writeFile(join(multiRoot, 'content/walkthroughs/graphics/a.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" data-part="box"/></svg>');
+  const demo = {type:'svg',code:true,graphics:{scene:'walkthroughs/graphics/a.svg'},scenarios:[{id:'a',label:'A',graphic:'scene',steps:[{line:2,explanation:'Segunda línea'}]}]};
+  await writeFile(join(multiRoot,'content/walkthroughs/demo.json'), JSON.stringify(demo));
+  await writeFile(join(multiRoot,'content/walkthroughs/visual.json'), JSON.stringify({type:'svg',graphics:demo.graphics,scenarios:[{id:'a',label:'A',graphic:'scene',steps:[{explanation:'Visual'}]}]}));
+  const link = '[Demo](../walkthroughs/demo.json)';
+  const code = value => `\`\`\`python\n${value}\nprint(x)\n\`\`\``;
+  const file = join(multiRoot,'content/lessons/a.md');
+  await writeFile(file, `# Mezcla\n\n${code('x = 1')}\n\n[Visual](../walkthroughs/visual.json)\n\n${code('x = 2')}\n\n${link}\n\n${code('x = 3')}\n\n${link}`);
+  const [lesson] = await readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]);
+  assert.deepEqual(lesson.walkthroughs.map(item => item.code), [null, 'x = 2\nprint(x)', 'x = 3\nprint(x)']);
+  await writeFile(file, `# Mezcla\n\n${code('x = 2')}\n\n${link}\n\n\`\`\`python\nx = 3\n\`\`\`\n\n${link}`);
+  await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
+  await writeFile(file, `# Mezcla\n\n${code('x = 2')}\n\n${link}\n\n${link}`);
+  await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
+  demo.code = false;
+  await writeFile(join(multiRoot,'content/walkthroughs/visual.json'), JSON.stringify(demo));
+  await writeFile(file, '# Mezcla\n\n[Visual](../walkthroughs/visual.json)');
+  await assert.rejects(readLessons(multiRoot,[{id:'a',file:'lessons/a.md'}]));
+} finally { await rm(multiRoot,{recursive:true,force:true}); }
+
+const headingRoot = await mkdtemp(join(tmpdir(), 'lesson-heading-'));
+try {
+  await mkdir(join(headingRoot, 'content/lessons'), {recursive:true});
+  const file = join(headingRoot, 'content/lessons/a.md');
+  await writeFile(file, '<div>\n# No es título\n</div>\n\n```md\n# Tampoco\n```\n\n# **Hola** [Python](https://example.com) `3` &amp; más\n');
+  const [lesson] = await readLessons(headingRoot, [{id:'a',file:'lessons/a.md'}]);
+  assert.equal(lesson.title, 'Hola Python 3 & más');
+  await writeFile(file, '<div>\n# No es título\n</div>\n\n```md\n# Tampoco\n```');
+  await assert.rejects(readLessons(headingRoot, [{id:'a',file:'lessons/a.md'}]), /Falta título/);
+} finally { await rm(headingRoot, {recursive:true,force:true}); }

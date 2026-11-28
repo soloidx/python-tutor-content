@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "id": "curso-prueba-lecciones",
+  "title": "Curso de prueba de lecciones",
+  "description": "Curso mixto de prueba para lecciones Markdown.",
+  "topics": [
+    {
+      "id": "valores-variables",
+      "title": "Valores y variables",
+      "duration": "12 min",
+      "summary": "Dale un nombre a tus primeras ideas.",
+      "exercises": [
+        {
+          "id": "saludo",
+          "type": "code",
+          "title": "Tu primera variable",
+          "prompt": "Crea una variable llamada nombre con el texto \"Ada\". Muestra Hola, Ada usando esa variable.",
+          "starter": "# Guarda un nombre y úsalo en el saludo\nnombre = \"\"\nprint(\"Hola, \" + nombre)",
+          "hints": [
+            "Los textos necesitan comillas. Asigna el texto a la variable nombre con =.",
+            "Escribe nombre = \"Ada\" y usa print(\"Hola, \" + nombre)."
+          ],
+          "check": "nombre == \"Ada\" and _output == \"Hola, Ada\"",
+          "success": "Guardaste un texto en una variable y lo usaste para construir un saludo.",
+          "retry": "Revisa que nombre guarde \"Ada\" y que la salida sea exactamente Hola, Ada."
+        },
+        {
+          "id": "asignacion",
+          "type": "choice",
+          "title": "Interpretar una asignación",
+          "prompt": "¿Qué hace la instrucción edad = 7?",
+          "code": "edad = 7",
+          "hints": [
+            "Observa qué símbolo aparece entre el nombre y el valor.",
+            "En Python, = guarda un valor; == se usa para comparar."
+          ],
+          "options": [
+            {
+              "id": "asigna",
+              "text": "Guarda 7 en la variable edad"
+            },
+            {
+              "id": "compara",
+              "text": "Compara edad con 7",
+              "retry": "Busca el operador que Python usa para comparar dos valores."
+            },
+            {
+              "id": "imprime",
+              "text": "Muestra 7 en pantalla"
+            }
+          ],
+          "answerId": "asigna",
+          "retry": "Piensa en la diferencia entre asignar un valor y mostrarlo.",
+          "explanation": "El signo = asigna el valor 7 a la variable edad; no muestra nada en pantalla."
+        },
+        {
+          "id": "cumpleanos",
+          "type": "code",
+          "title": "Un valor que cambia",
+          "prompt": "Guarda 20 en edad. Después aumenta su valor en 1 usando la variable y muestra la nueva edad: 21.",
+          "starter": "# Un año más\nedad = 20\n# Actualiza edad aquí\nprint(edad)",
+          "hints": [
+            "Puedes usar el valor actual de edad para calcular el siguiente.",
+            "Después de edad = 20, escribe edad = edad + 1 y muestra edad con print()."
+          ],
+          "check": "type(edad) is int and edad == 21 and _output == \"21\"",
+          "success": "Actualizaste una variable y mostraste su nuevo valor.",
+          "retry": "La variable edad debe guardar el número 21 y la salida debe mostrar 21."
+        }
+      ],
+      "icon": "icons/topic.svg",
+      "lessons": [
+        {
+          "id": "introduccion",
+          "file": "lessons/prueba/introduccion.md"
+        },
+        {
+          "id": "valores",
+          "file": "lessons/prueba/valores.md"
+        },
+        {
+          "id": "salida",
+          "file": "lessons/prueba/salida.md"
+        }
+      ]
+    },
+    {
+      "id": "expresiones-salida",
+      "title": "Expresiones y salida",
+      "duration": "12 min",
+      "summary": "Combina valores y muestra tus resultados.",
+      "explanation": [
+        "Una expresión combina valores y operadores para calcular un resultado: 2 + 3 vale 5. Usa + para sumar, - para restar, * para multiplicar y / para dividir.",
+        "Python multiplica y divide antes de sumar y restar. Los paréntesis cambian el orden: (2 + 3) * 4 vale 20.",
+        "Guarda el resultado en una variable o pásalo a print(). Con varios argumentos separados por comas, print() añade un espacio entre los valores."
+      ],
+      "example": "precio = 5\ncantidad = 2\ntotal = precio * cantidad\nprint(\"Total:\", total)",
+      "takeaway": "Calcular un valor no lo muestra automáticamente. Usa print() para ver el resultado en la consola.",
+      "exercises": [
+        {
+          "id": "total-compra",
+          "type": "code",
+          "title": "Calcula una compra",
+          "prompt": "Guarda 8 en precio y 3 en cantidad. Calcula total multiplicando ambas variables y muestra 24.",
+          "starter": "precio = 8\ncantidad = 3\ntotal = 0\nprint(total)",
+          "hints": [
+            "El operador * multiplica dos números.",
+            "Calcula total = precio * cantidad y muestra total con print()."
+          ],
+          "check": "precio == 8 and cantidad == 3 and total == 24 and _output == \"24\"",
+          "success": "Calculaste un resultado a partir de dos variables.",
+          "retry": "Usa precio = 8 y cantidad = 3; total y la salida deben ser 24."
+        },
+        {
+          "id": "mensaje-puntos",
+          "type": "code",
+          "title": "Un mensaje con resultado",
+          "prompt": "Suma 10 + 5 y guarda el resultado en puntos. Muestra exactamente Puntos: 15 usando print() con texto y la variable.",
+          "starter": "puntos = 0\nprint(\"Puntos:\", puntos)",
+          "hints": [
+            "Primero calcula puntos con +. print() puede recibir un texto y un número separados por una coma.",
+            "Escribe puntos = 10 + 5 y después print(\"Puntos:\", puntos)."
+          ],
+          "check": "puntos == 15 and _output == \"Puntos: 15\"",
+          "success": "Combinaste un cálculo y un mensaje en la salida.",
+          "retry": "puntos debe valer 15 y la salida debe ser exactamente Puntos: 15."
+        },
+        {
+          "id": "orden-operaciones",
+          "type": "choice",
+          "title": "Leer una expresión",
+          "prompt": "¿Qué valor muestra print(2 + 3 * 4)?",
+          "code": "print(2 + 3 * 4)",
+          "hints": [
+            "Observa qué operación aparece antes de la suma.",
+            "Python calcula la multiplicación antes que la suma, salvo que haya paréntesis."
+          ],
+          "options": [
+            {
+              "id": "catorce",
+              "text": "14"
+            },
+            {
+              "id": "veinte",
+              "text": "20",
+              "retry": "Calcula primero 3 * 4 y después suma 2."
+            },
+            {
+              "id": "veintiocho",
+              "text": "28"
+            }
+          ],
+          "answerId": "catorce",
+          "retry": "Recuerda que la multiplicación se realiza antes que la suma.",
+          "explanation": "3 * 4 se calcula primero y da 12; después 2 + 12 da 14."
+        }
+      ],
+      "icon": "icons/topic.svg"
+    }
+  ],
+  "icon": "icons/course.svg"
+}
